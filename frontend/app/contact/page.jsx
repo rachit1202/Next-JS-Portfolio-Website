@@ -39,10 +39,10 @@ export default async function ContactPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
 
       {/* Header */}
-      <div className="space-y-3">
+      <div className="space-y-4 max-w-2xl">
         <p className="section-label">// GET IN TOUCH</p>
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white">Contact</h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl">
+        <h1 className="text-4xl sm:text-5xl font-black text-white">Contact</h1>
+        <p className="text-base text-slate-400 leading-relaxed max-w-xl">
           Have a project in mind? Let&apos;s build something exceptional together.
         </p>
       </div>

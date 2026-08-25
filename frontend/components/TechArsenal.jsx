@@ -76,10 +76,10 @@ export default function TechArsenal({ skills = [] }) {
             </div>
 
             <div>
-              <h4 className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm group-hover:text-purple-600 dark:group-hover:text-cyan-300 transition-colors line-clamp-1">
+              <h4 className="font-bold text-white text-xs sm:text-sm group-hover:text-cyan-300 transition-colors line-clamp-1">
                 {skill.name}
               </h4>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider font-bold mt-0.5">
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mt-0.5">
                 {skill.category || 'Frontend'}
               </p>
 

@@ -95,7 +95,7 @@ export default async function ServiceDetailPage({ params }) {
             {icon}
           </div>
           <div className="space-y-2">
-            <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
               {service.title}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">

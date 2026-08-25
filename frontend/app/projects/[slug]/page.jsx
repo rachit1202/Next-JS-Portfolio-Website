@@ -69,7 +69,8 @@ export default async function ProjectDetailPage({ params }) {
           )}
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+        {/* Title */}
+        <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
           {project.title}
         </h1>
 

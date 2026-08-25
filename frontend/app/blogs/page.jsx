@@ -50,9 +50,9 @@ export default async function BlogsPage({ searchParams }) {
 
       {/* Header */}
       <div className="space-y-4">
-        <p className="section-label">// THOUGHTS &amp; TUTORIALS</p>
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white">Blog</h1>
-        <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+        <p className="section-label mb-2">// INSIGHTS &amp; TUTORIALS</p>
+        <h1 className="text-4xl sm:text-5xl font-black text-white">Blog</h1>
+        <p className="text-slate-400 mt-2 text-sm sm:text-base max-w-xl">
           In-depth articles on web development, architecture, and engineering craft.
         </p>
       </div>

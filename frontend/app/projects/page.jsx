@@ -46,9 +46,9 @@ export default async function ProjectsPage({ searchParams }) {
 
       {/* Header */}
       <div className="space-y-4">
-        <p className="section-label">// SELECTED WORK</p>
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white">Projects</h1>
-        <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+        <p className="section-label">// PORTFOLIO</p>
+        <h1 className="text-4xl sm:text-5xl font-black text-white">Projects</h1>
+        <p className="text-base text-slate-400 leading-relaxed max-w-xl">
           A curated selection of work across industries and disciplines.
         </p>
       </div>

@@ -73,12 +73,12 @@ export default function BlogCard({ blog, variant = 'vertical' }) {
             </div>
 
             {/* Title */}
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-cyan-300 transition-colors line-clamp-2 leading-snug">
+            <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-2 leading-snug">
               {blog.title}
             </h3>
 
             {/* Summary */}
-            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+            <p className="text-sm text-slate-300 leading-relaxed line-clamp-2">
               {blog.summary}
             </p>
           </div>

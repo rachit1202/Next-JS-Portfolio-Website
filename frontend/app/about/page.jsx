@@ -25,12 +25,12 @@ export default async function AboutPage() {
         <div className="lg:col-span-3 space-y-8 animate-fade-in">
           <div>
             <p className="section-label mb-3">// ABOUT ME</p>
-            <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight">
               {config.aboutHeadline || 'Crafting the web with precision & passion.'}
             </h1>
           </div>
 
-          <div className="space-y-4 text-slate-700 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+          <div className="space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed">
             {bioParagraphs.map((para, idx) => (
               <p key={idx}>{para}</p>
             ))}
@@ -39,10 +39,10 @@ export default async function AboutPage() {
           {/* Personal Info Grid */}
           <div className="grid grid-cols-2 gap-3">
             {[
-              { icon: <Mail className="w-4 h-4 text-purple-500 dark:text-purple-400" />, label: 'Email', value: config.email || 'rachitaggarwal1202@gmail.com', href: `mailto:${config.email || 'rachitaggarwal1202@gmail.com'}` },
-              { icon: <Phone className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />, label: 'Phone', value: config.phone || '+91 9873088907', href: `tel:${config.phone || '+919873088907'}` },
-              { icon: <MapPin className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />, label: 'Location', value: config.location || 'Rohini, New Delhi 110085', href: null },
-              { icon: <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />, label: 'Availability', value: config.availabilityStatus || 'Open to Freelance / Full-time', href: null },
+              { icon: <Mail className="w-4 h-4 text-purple-400" />, label: 'Email', value: config.email || 'rachitaggarwal1202@gmail.com', href: `mailto:${config.email || 'rachitaggarwal1202@gmail.com'}` },
+              { icon: <Phone className="w-4 h-4 text-cyan-400" />, label: 'Phone', value: config.phone || '+91 9873088907', href: `tel:${config.phone || '+919873088907'}` },
+              { icon: <MapPin className="w-4 h-4 text-indigo-400" />, label: 'Location', value: config.location || 'Rohini, New Delhi 110085', href: null },
+              { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, label: 'Availability', value: config.availabilityStatus || 'Open to Freelance / Full-time', href: null },
             ].map(({ icon, label, value, href }) => (
               <div
                 key={label}
@@ -50,11 +50,11 @@ export default async function AboutPage() {
               >
                 <div className="mt-0.5">{icon}</div>
                 <div>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-0.5">{label}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5">{label}</p>
                   {href ? (
-                    <a href={href} className="text-xs text-slate-900 dark:text-slate-200 hover:text-purple-600 dark:hover:text-cyan-300 transition-colors break-all font-medium">{value}</a>
+                    <a href={href} className="text-xs text-slate-200 hover:text-cyan-300 transition-colors break-all font-medium">{value}</a>
                   ) : (
-                    <p className="text-xs text-slate-900 dark:text-slate-200 font-medium">{value}</p>
+                    <p className="text-xs text-slate-200 font-medium">{value}</p>
                   )}
                 </div>
               </div>

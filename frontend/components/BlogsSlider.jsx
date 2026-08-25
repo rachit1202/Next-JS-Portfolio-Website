@@ -130,10 +130,10 @@ export default function BlogsSlider({ blogs = [] }) {
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                   <div className="space-y-1.5 sm:space-y-2">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-cyan-300 transition-colors">
+                    <h3 className="text-base font-bold text-white line-clamp-2 group-hover:text-cyan-300 transition-colors">
                       {blog.title}
                     </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
                       {blog.summary}
                     </p>
                   </div>
@@ -144,7 +144,7 @@ export default function BlogsSlider({ blogs = [] }) {
                       {blog.tags?.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 rounded text-[10px] text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10"
+                          className="px-2 py-0.5 rounded text-[10px] text-slate-400 bg-white/5 border border-white/10"
                         >
                           #{tag}
                         </span>

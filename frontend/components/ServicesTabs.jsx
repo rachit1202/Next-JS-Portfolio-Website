@@ -119,20 +119,20 @@ export default function ServicesTabs({ services = [] }) {
 
                 {/* Title & Short Description */}
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">
                     {service.title}
                   </h3>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 font-medium mt-2 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-slate-300 font-medium mt-2 leading-relaxed line-clamp-3">
                     {service.shortDesc}
                   </p>
                 </div>
 
                 {/* Features Checklist */}
                 {service.features && service.features.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-white/5">
+                  <div className="space-y-2 pt-2 border-t border-white/5">
                     {service.features.slice(0, 3).map((feature, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-2 text-xs text-slate-800 dark:text-slate-200 font-medium">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
+                      <div key={fIdx} className="flex items-start gap-2 text-xs text-slate-200 font-medium">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{feature}</span>
                       </div>
                     ))}

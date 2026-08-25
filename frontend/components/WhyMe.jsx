@@ -78,7 +78,7 @@ export default function WhyMe({ config = {} }) {
             >
               {value}
             </span>
-            <span className="text-xs text-slate-600 dark:text-slate-400 font-semibold">{label}</span>
+            <span className="text-xs text-slate-400 font-semibold">{label}</span>
           </div>
         ))}
       </div>
@@ -88,7 +88,7 @@ export default function WhyMe({ config = {} }) {
         {reasons.map(({ icon, title, desc, color }) => (
           <div
             key={title}
-            className="why-card glass-card glass-card-hover rounded-3xl p-7 flex items-start gap-5 opacity-0 border border-slate-200 dark:border-white/5"
+            className="why-card glass-card glass-card-hover rounded-3xl p-7 flex items-start gap-5 opacity-0 border border-white/10"
           >
             <div
               className="w-13 h-13 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
@@ -100,8 +100,8 @@ export default function WhyMe({ config = {} }) {
               {icon}
             </div>
             <div className="space-y-1.5">
-              <h3 className="font-bold text-slate-900 dark:text-white text-base">{title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{desc}</p>
+              <h3 className="font-bold text-white text-base">{title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{desc}</p>
             </div>
           </div>
         ))}

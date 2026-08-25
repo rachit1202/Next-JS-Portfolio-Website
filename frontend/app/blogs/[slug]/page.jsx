@@ -68,7 +68,7 @@ export default async function BlogDetailPage({ params }) {
         )}
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
           {blog.title}
         </h1>
 

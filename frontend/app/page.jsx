@@ -43,23 +43,23 @@ export default async function HomePage() {
                 className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-card"
               >
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span className="text-xs font-semibold text-slate-300">
                   {config.availabilityStatus || 'Available for freelance work'}
                 </span>
               </div>
 
               {/* 2-Line Headline */}
               <div>
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.08] tracking-tight text-slate-900 dark:text-white">
-                  <span>{config.heroTitleWord1 || 'Building'}</span>{' '}
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.08] tracking-tight text-white">
+                  <span className="text-white">{config.heroTitleWord1 || 'Building'}</span>{' '}
                   <span className="gradient-text">{config.heroTitleWord2 || 'digital'}</span>
                   <br />
-                  <span>{config.heroTitleWord3 || 'excellence.'}</span>
+                  <span className="text-white">{config.heroTitleWord3 || 'excellence.'}</span>
                 </h1>
               </div>
 
               {/* Description */}
-              <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-lg">
+              <p className="text-base sm:text-lg text-slate-300 font-medium leading-relaxed max-w-lg">
                 {config.heroDescription || config.shortBio}
               </p>
 
@@ -192,8 +192,8 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-2 mb-6 sm:mb-8">
               <p className="section-label">// TECHNICAL ARSENAL</p>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">Full-Stack Core Competencies</h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-black text-white">Full-Stack Core Competencies</h2>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
                 Modern tools, architectures, and libraries I leverage to build production-grade web solutions.
               </p>
             </div>
@@ -210,13 +210,13 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
                 <div>
                   <p className="section-label">// CASE STUDIES</p>
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mt-0.5">Featured Projects</h2>
+                  <h2 className="text-3xl sm:text-4xl font-black text-white mt-0.5">Featured Projects</h2>
                 </div>
                 <Link
                   href="/projects"
                   className="flex items-center gap-1.5 text-xs sm:text-sm font-bold gradient-text hover:opacity-80 transition-opacity"
                 >
-                  View All Projects <ChevronRight className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+                  View All Projects <ChevronRight className="w-4 h-4 text-cyan-400" />
                 </Link>
               </div>
               <HomeSlider projects={projects} />
@@ -233,13 +233,13 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
                 <div>
                   <p className="section-label">// WHAT I OFFER</p>
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mt-0.5">Services &amp; Solutions</h2>
+                  <h2 className="text-3xl sm:text-4xl font-black text-white mt-0.5">Services &amp; Solutions</h2>
                 </div>
                 <Link
                   href="/services"
                   className="flex items-center gap-1.5 text-xs sm:text-sm font-bold gradient-text hover:opacity-80 transition-opacity"
                 >
-                  All Services <ChevronRight className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+                  All Services <ChevronRight className="w-4 h-4 text-cyan-400" />
                 </Link>
               </div>
               <ServicesTabs services={services} />
@@ -256,13 +256,13 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
                 <div>
                   <p className="section-label">// INSIGHTS &amp; CODE</p>
-                  <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mt-0.5">Latest Articles</h2>
+                  <h2 className="text-3xl sm:text-4xl font-black text-white mt-0.5">Latest Articles</h2>
                 </div>
                 <Link
                   href="/blogs"
                   className="flex items-center gap-1.5 text-xs sm:text-sm font-bold gradient-text hover:opacity-80 transition-opacity"
                 >
-                  Read All Blogs <ChevronRight className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+                  Read All Blogs <ChevronRight className="w-4 h-4 text-cyan-400" />
                 </Link>
               </div>
               <BlogsSlider blogs={blogs} />
@@ -277,8 +277,8 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center space-y-2 mb-8 sm:mb-10">
               <p className="section-label">// WHY CHOOSE ME</p>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">The Engineering Standard</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
+              <h2 className="text-3xl sm:text-4xl font-black text-white">The Engineering Standard</h2>
+              <p className="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
                 Code quality, speed, and client satisfaction — delivering scalable digital solutions that drive business results.
               </p>
             </div>
@@ -301,10 +301,10 @@ export default async function HomePage() {
               <div className="glow-orb glow-cyan absolute w-48 h-48 -bottom-10 -left-10 opacity-20" />
               <div className="relative z-10 space-y-5">
                 <p className="section-label">// LET&apos;S BUILD TOGETHER</p>
-                <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight">
+                <h2 className="text-3xl sm:text-5xl font-black text-white leading-tight">
                   {config.ctaHeading || 'Ready to bring your vision to life?'}
                 </h2>
-                <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed">
+                <p className="text-slate-300 text-xs sm:text-sm max-w-lg mx-auto leading-relaxed">
                   {config.ctaSubtitle || "Whether it's a startup MVP, enterprise platform, or WordPress site — let's make it happen."}
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4 pt-2">

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ==============================
    CSS DESIGN TOKENS (PURPLE -> INDIGO -> CYAN LOGO GRADIENT)
@@ -22,97 +23,54 @@
     --border-dark: rgba(99, 102, 241, 0.18);
     --border-dark-subtle: rgba(255, 255, 255, 0.07);
     
-    --bg-light: #f6f8fd;
-    --card-light: #ffffff;
-    --border-light: #e2e8f0;
     --text-muted-dark: #94a3b8;
-    --text-muted-light: #64748b;
   }
 
-  html.dark body {
-    background-color: var(--bg-dark);
+  body {
+    background-color: #07070d;
     color: #f1f5f9;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  html.light body {
-    background-color: var(--bg-light);
-    color: #0f172a;
+  /* Global Headings: Always Bright Crisp White */
+  h1, h2, h3, h4, h5, h6, .section-title {
+    color: #ffffff !important;
   }
 
-  /* Global Headings in Light Mode */
-  html.light h1,
-  html.light h2,
-  html.light h3,
-  html.light h4,
-  html.light h5,
-  html.light h6 {
-    color: #0f172a !important;
-  }
-
-  /* Preserve gradient text fills in Light Mode */
-  html.light .gradient-text,
-  html.light .gradient-text-purple,
-  html.light .section-label,
-  html.light [style*="background-clip: text"],
-  html.light [style*="-webkit-background-clip: text"] {
+  /* Preserve gradient text fills */
+  .gradient-text,
+  .gradient-text-purple,
+  .section-label,
+  [style*="background-clip: text"],
+  [style*="-webkit-background-clip: text"] {
     color: transparent !important;
     -webkit-text-fill-color: transparent !important;
   }
 
-  /* Subtitles & descriptions in Light Mode */
-  html.light p {
-    color: #334155;
-  }
-  html.light .glass-card p {
-    color: #334155 !important;
-  }
-  html.light .glass-card h1,
-  html.light .glass-card h2,
-  html.light .glass-card h3,
-  html.light .glass-card h4 {
-    color: #0f172a !important;
+  /* Paragraphs & Subtitles */
+  p {
+    color: #cbd5e1;
   }
 
-  /* Code editor mockup always stays in dark mode styling */
-  html.light .code-editor {
-    background: #0f0f1c !important;
-    color: #f1f5f9 !important;
+  .glass-card p {
+    color: #94a3b8;
   }
-  html.light .code-editor * {
-    color: inherit;
-  }
-  html.light .code-editor .text-white {
+
+  .glass-card h1,
+  .glass-card h2,
+  .glass-card h3,
+  .glass-card h4 {
     color: #ffffff !important;
-  }
-  html.light .code-editor .text-slate-200 {
-    color: #e2e8f0 !important;
-  }
-  html.light .code-editor .text-slate-300 {
-    color: #cbd5e1 !important;
-  }
-  html.light .code-editor .text-slate-400 {
-    color: #94a3b8 !important;
   }
 
   /* Primary Button text always white */
-  html.light .btn-primary,
-  html.light .btn-primary * {
+  .btn-primary,
+  .btn-primary * {
     color: #ffffff !important;
-  }
-
-  /* Badges with gradients stay white */
-  html.light span[style*="linear-gradient"],
-  html.light div[style*="linear-gradient"] {
-    color: #ffffff;
-  }
-
-  body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
   * {

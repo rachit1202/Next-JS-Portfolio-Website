@@ -151,10 +151,10 @@ export default function HomeSlider({ projects = [] }) {
                 {/* Card Content */}
                 <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                   <div className="space-y-1.5 sm:space-y-2">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-cyan-300 transition-colors line-clamp-1">
+                    <h3 className="text-base font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-1">
                       {project.title}
                     </h3>
-                    <p className="text-xs text-slate-700 dark:text-slate-300 font-medium leading-relaxed line-clamp-2">
+                    <p className="text-xs text-slate-300 font-medium leading-relaxed line-clamp-2">
                       {project.shortDescription}
                     </p>
                   </div>
@@ -165,13 +165,13 @@ export default function HomeSlider({ projects = [] }) {
                       {project.techStack?.slice(0, 3).map((tech) => (
                         <span
                           key={tech}
-                          className="px-2.5 py-0.5 rounded-md text-[11px] font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10"
+                          className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-slate-300 bg-white/5 border border-white/10"
                         >
                           {tech}
                         </span>
                       ))}
                       {project.techStack?.length > 3 && (
-                        <span className="px-2 py-0.5 rounded-md text-[11px] font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10">
+                        <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold text-slate-400 bg-white/5 border border-white/10">
                           +{project.techStack.length - 3}
                         </span>
                       )}
