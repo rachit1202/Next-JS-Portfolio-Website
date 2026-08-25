@@ -494,109 +494,101 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
-        {/* All Users Table */}
-        <div className="glass-card rounded-3xl overflow-hidden border border-slate-800">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-900/80 text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
-                <tr>
-                  <th className="p-4">User Account ({filteredUsers.length})</th>
-                  <th className="p-4">Email Address</th>
-                  <th className="p-4">Role &amp; Permissions</th>
-                  <th className="p-4">Created Date</th>
-                  <th className="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/80 text-slate-300">
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-500 text-xs">
-                      No user accounts found matching &ldquo;{searchTerm}&rdquo;
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((u) => (
-                    <tr key={u._id || u.username} className="hover:bg-slate-900/50 transition-colors">
-                      <td className="p-4 font-semibold text-white">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 font-bold shrink-0">
-                            {(u.name || u.username || 'U')[0].toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="text-sm font-bold text-white flex items-center gap-2">
-                              {u.name || u.username}
-                              {currentUser && (u._id === currentUser.id || u.username === currentUser.username) && (
-                                <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono">
-                                  You
-                                </span>
-                              )}
-                            </div>
-                            <div className="text-xs text-slate-400 font-mono">@{u.username}</div>
-                          </div>
-                        </div>
-                      </td>
-
-                      <td className="p-4 font-mono text-cyan-400">
-                        <a href={`mailto:${u.email}`} className="hover:underline flex items-center gap-1.5">
-                          <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                          {u.email}
-                        </a>
-                      </td>
-
-                      <td className="p-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase border ${
-                          u.role === 'admin'
-                            ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
-                            : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
-                        }`}>
-                          <Shield className="w-2.5 h-2.5 inline mr-1" />
-                          {u.role || 'admin'}
-                        </span>
-                      </td>
-
-                      <td className="p-4 font-mono text-slate-400 text-[11px]">
-                        {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'Initial Seed'}
-                      </td>
-
-                      <td className="p-4 text-right space-x-2">
-                        {/* Direct Reset Password */}
-                        <button
-                          onClick={() => {
-                            setResetModalUser(u);
-                            setAdminNewPassword('');
-                            setResetMsg(null);
-                          }}
-                          className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-xs font-medium text-amber-400 border border-amber-500/20 cursor-pointer transition-colors"
-                          title="Reset Password directly"
-                        >
-                          <Key className="w-3 h-3 inline mr-1" /> Reset Pwd
-                        </button>
-
-                        {/* Edit User Details */}
-                        <button
-                          onClick={() => openEditDrawer(u)}
-                          className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-200 border border-slate-800 cursor-pointer transition-colors"
-                        >
-                          <Edit2 className="w-3 h-3 inline mr-1" /> Edit
-                        </button>
-
-                        {/* Delete User */}
-                        {(!currentUser || (u._id !== currentUser.id && u.username !== currentUser.username)) && (
-                          <button
-                            onClick={() => handleDeleteUser(u)}
-                            className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-medium text-rose-400 border border-rose-500/20 cursor-pointer transition-colors"
-                          >
-                            <Trash2 className="w-3 h-3 inline mr-1" /> Delete
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+        {/* All Users Cards Grid (Matching Services CMS Style) */}
+        {filteredUsers.length === 0 ? (
+          <div className="glass-card p-12 rounded-3xl border border-slate-800 text-center text-slate-500 text-xs">
+            No user accounts found matching &ldquo;{searchTerm}&rdquo;
           </div>
-        </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredUsers.map((u) => (
+              <div
+                key={u._id || u.username}
+                className="glass-card p-5 sm:p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between hover:border-slate-700 transition-all"
+              >
+                <div className="space-y-3">
+                  {/* Top: User info & Role */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-300 font-bold text-lg shrink-0 shadow-lg shadow-purple-950/40">
+                        {(u.name || u.username || 'U')[0].toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-base font-bold text-white flex items-center gap-2">
+                          {u.name || u.username}
+                          {currentUser && (u._id === currentUser.id || u.username === currentUser.username) && (
+                            <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono font-bold">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs text-slate-400 font-mono mt-0.5">@{u.username}</div>
+                      </div>
+                    </div>
+
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase border shrink-0 ${
+                        u.role === 'admin'
+                          ? 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+                          : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+                      }`}
+                    >
+                      <Shield className="w-2.5 h-2.5 inline mr-1" />
+                      {u.role || 'admin'}
+                    </span>
+                  </div>
+
+                  {/* Email & Date Info */}
+                  <div className="space-y-1.5 pt-1 text-xs">
+                    <a
+                      href={`mailto:${u.email}`}
+                      className="text-cyan-400 font-mono flex items-center gap-2 hover:underline truncate"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                      {u.email}
+                    </a>
+                    <p className="text-[11px] text-slate-500 font-mono">
+                      Created: {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'Initial Seed'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-slate-800/80">
+                  {/* Reset Password */}
+                  <button
+                    onClick={() => {
+                      setResetModalUser(u);
+                      setAdminNewPassword('');
+                      setResetMsg(null);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-xs font-semibold text-amber-400 border border-amber-500/25 transition-colors"
+                  >
+                    <Key className="w-3 h-3 inline mr-1" /> Reset Pwd
+                  </button>
+
+                  {/* Edit */}
+                  <button
+                    onClick={() => openEditDrawer(u)}
+                    className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700 transition-colors"
+                  >
+                    <Edit2 className="w-3 h-3 inline mr-1" /> Edit
+                  </button>
+
+                  {/* Delete */}
+                  {(!currentUser || (u._id !== currentUser.id && u.username !== currentUser.username)) && (
+                    <button
+                      onClick={() => handleDeleteUser(u)}
+                      className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-semibold text-rose-400 border border-rose-500/25 transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3 inline mr-1" /> Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* SLIDE-OUT DRAWER: Create / Edit User */}
         {drawerOpen && (

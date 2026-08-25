@@ -198,74 +198,106 @@ export default function AdminBlogsPage() {
           </div>
         </div>
 
-        {/* Blogs Table */}
-        <div className="glass-card rounded-3xl overflow-hidden border border-slate-800">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-900/80 text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
-                <tr>
-                  <th className="p-4">Article Title ({filteredBlogs.length})</th>
-                  <th className="p-4">Category</th>
-                  <th className="p-4">Views</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/80 text-slate-300">
-                {filteredBlogs.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-500 text-xs">
-                      No blog articles found matching &ldquo;{searchTerm}&rdquo;
-                    </td>
-                  </tr>
-                ) : (
-                  filteredBlogs.map((b) => (
-                  <tr key={b._id} className="hover:bg-slate-900/50">
-                    <td className="p-4 font-semibold text-white">
-                      <div className="space-y-1">
-                        <div className="text-sm font-bold text-white">{b.title}</div>
-                        <Link
-                          href={`/blogs/${b.slug}`}
-                          target="_blank"
-                          className="text-[10px] text-cyan-400 font-mono flex items-center gap-1 hover:underline"
-                        >
-                          <Eye className="w-3 h-3" /> /blogs/{b.slug}
-                        </Link>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/25">
-                        {b.category}
-                      </span>
-                    </td>
-                    <td className="p-4 font-mono text-cyan-400">{b.viewsCount || 0}</td>
-                    <td className="p-4">
-                      {b.isPublished ? (
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-semibold">Published</span>
-                      ) : (
-                        <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-semibold">Draft</span>
-                      )}
-                    </td>
-                    <td className="p-4 text-right space-x-2">
-                      <button
-                        onClick={() => openEditDrawer(b)}
-                        className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-200 border border-slate-800"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(b._id)}
-                        className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-medium text-rose-400 border border-rose-500/20"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                )))}
-              </tbody>
-            </table>
+        {/* Blogs Cards Grid (Matching Services CMS Style) */}
+        {filteredBlogs.length === 0 ? (
+          <div className="glass-card p-12 rounded-3xl border border-slate-800 text-center text-slate-500 text-xs">
+            No blog articles found matching &ldquo;{searchTerm}&rdquo;
           </div>
-        </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredBlogs.map((b) => (
+              <div
+                key={b._id}
+                className="glass-card p-5 sm:p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between hover:border-slate-700 transition-all"
+              >
+                <div className="space-y-3">
+                  {/* Top: Title & Badges */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={b.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=120'}
+                        alt=""
+                        className="w-12 h-12 rounded-2xl object-cover bg-slate-900 shrink-0 border border-slate-800"
+                      />
+                      <div>
+                        <h3 className="text-base font-bold text-white leading-snug">{b.title}</h3>
+                        <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
+                          <span className="font-mono text-cyan-400 flex items-center gap-1">
+                            <Eye className="w-3 h-3" /> {b.viewsCount || 0} views
+                          </span>
+                          <span>&bull;</span>
+                          <span>{b.readTime || '5 min read'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/25">
+                        {b.category || 'Tech'}
+                      </span>
+                      <span
+                        className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-bold ${
+                          b.isPublished
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                            : 'bg-amber-500/20 text-amber-400'
+                        }`}
+                      >
+                        {b.isPublished ? 'Published' : 'Draft'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Summary */}
+                  {b.summary && (
+                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
+                      {b.summary}
+                    </p>
+                  )}
+
+                  {/* Tags */}
+                  {b.tags && b.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {b.tags.slice(0, 5).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-0.5 rounded-lg text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-800"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
+                  <Link
+                    href={`/blogs/${b.slug}`}
+                    target="_blank"
+                    className="text-xs text-cyan-400 font-mono flex items-center gap-1.5 hover:underline"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> View Live Page
+                  </Link>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditDrawer(b)}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(b._id)}
+                      className="px-3.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-semibold text-rose-400 border border-rose-500/25 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* SLIDE-OUT SIDE PANEL DRAWER */}
         {drawerOpen && (

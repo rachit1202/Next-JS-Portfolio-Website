@@ -210,85 +210,103 @@ export default function AdminProjectsPage() {
           </div>
         </div>
 
-        {/* Projects Table */}
-        <div className="glass-card rounded-3xl overflow-hidden border border-slate-800">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-900/80 text-slate-400 font-mono uppercase text-[10px] border-b border-slate-800">
-                <tr>
-                  <th className="p-4">Project ({filteredProjects.length})</th>
-                  <th className="p-4">Category</th>
-                  <th className="p-4">Tech Stack</th>
-                  <th className="p-4">Featured</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/80 text-slate-300">
-                {filteredProjects.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-500 text-xs">
-                      No projects found matching &ldquo;{searchTerm}&rdquo;
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProjects.map((proj) => (
-                  <tr key={proj._id} className="hover:bg-slate-900/50">
-                    <td className="p-4 font-semibold text-white">
-                      <div className="flex items-center gap-3">
-                        <img src={proj.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=100'} alt="" className="w-12 h-12 rounded-xl object-cover bg-slate-900 shrink-0 border border-slate-800" />
-                        <div className="space-y-1">
-                          <div className="text-sm font-bold text-white">{proj.title}</div>
-                          <Link
-                            href={`/projects/${proj.slug}`}
-                            target="_blank"
-                            className="text-[10px] text-cyan-400 font-mono flex items-center gap-1 hover:underline"
-                          >
-                            <Eye className="w-3 h-3" /> /projects/{proj.slug}
-                          </Link>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-white/5 text-slate-300">
-                        {proj.category}
-                      </span>
-                    </td>
-                    <td className="p-4 max-w-xs truncate">{proj.techStack?.join(', ')}</td>
-                    <td className="p-4">
-                      {proj.featured ? (
-                        <span className="text-cyan-400 font-bold">Featured ★</span>
-                      ) : (
-                        <span className="text-slate-500">Standard</span>
-                      )}
-                    </td>
-                    <td className="p-4">
-                      {proj.isPublished ? (
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-semibold">Published</span>
-                      ) : (
-                        <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-semibold">Draft</span>
-                      )}
-                    </td>
-                    <td className="p-4 text-right space-x-2">
-                      <button
-                        onClick={() => openEditDrawer(proj)}
-                        className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-medium text-slate-200 border border-slate-800"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(proj._id)}
-                        className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-medium text-rose-400 border border-rose-500/20"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                )))}
-              </tbody>
-            </table>
+        {/* Projects Cards Grid (Matching Services CMS Style) */}
+        {filteredProjects.length === 0 ? (
+          <div className="glass-card p-12 rounded-3xl border border-slate-800 text-center text-slate-500 text-xs">
+            No projects found matching &ldquo;{searchTerm}&rdquo;
           </div>
-        </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredProjects.map((proj) => (
+              <div
+                key={proj._id}
+                className="glass-card p-5 sm:p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between hover:border-slate-700 transition-all"
+              >
+                <div className="space-y-3">
+                  {/* Top: Title & Badges */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={proj.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=120'}
+                        alt=""
+                        className="w-12 h-12 rounded-2xl object-cover bg-slate-900 shrink-0 border border-slate-800"
+                      />
+                      <div>
+                        <h3 className="text-base font-bold text-white leading-snug">{proj.title}</h3>
+                        <p className="text-[11px] text-slate-400 font-medium mt-0.5">
+                          Client: {proj.clientName || 'Portfolio'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/25">
+                        {proj.category || 'Full-Stack'}
+                      </span>
+                      {proj.featured && (
+                        <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-bold">
+                          Featured ★
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {proj.shortDescription && (
+                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
+                      {proj.shortDescription}
+                    </p>
+                  )}
+
+                  {/* Tech Stack Badges */}
+                  {proj.techStack && proj.techStack.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {proj.techStack.slice(0, 6).map((t) => (
+                        <span
+                          key={t}
+                          className="px-2.5 py-1 rounded-lg text-[10px] font-medium bg-slate-900/90 text-slate-300 border border-slate-800"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                      {proj.techStack.length > 6 && (
+                        <span className="px-2 py-1 rounded-lg text-[10px] text-slate-500 bg-slate-900 border border-slate-800">
+                          +{proj.techStack.length - 6}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
+                  <Link
+                    href={`/projects/${proj.slug}`}
+                    target="_blank"
+                    className="text-xs text-cyan-400 font-mono flex items-center gap-1.5 hover:underline"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> View Live Page
+                  </Link>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditDrawer(proj)}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-700 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(proj._id)}
+                      className="px-3.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-xs font-semibold text-rose-400 border border-rose-500/25 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* SLIDE-OUT SIDE PANEL DRAWER */}
         {drawerOpen && (

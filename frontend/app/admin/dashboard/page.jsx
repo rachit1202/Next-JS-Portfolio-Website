@@ -131,12 +131,12 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* 6 Key Metrics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        {/* 6 Key Metrics Cards (2 per row on mobile) */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-4">
           {/* Projects */}
           <Link
             href="/admin/projects"
-            className="glass-card p-5 rounded-2xl hover:border-purple-500/50 transition-all space-y-2 group block"
+            className="glass-card p-3.5 sm:p-5 rounded-2xl hover:border-purple-500/50 transition-all space-y-1.5 sm:space-y-2 group block"
           >
             <div className="flex items-center justify-between text-purple-400">
               <FolderGit2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
