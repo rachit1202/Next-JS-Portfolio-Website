@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import Footer from '@/components/Footer';
 import SiteFooter from '@/components/SiteFooter';
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
             {children}
           </ClientLayout>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
