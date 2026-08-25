@@ -16,13 +16,17 @@ import {
   Globe,
   Activity,
   ShieldCheck,
-  Users
+  Users,
+  Menu,
+  X,
+  ExternalLink
 } from 'lucide-react';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     api.getMe()
@@ -32,7 +36,10 @@ export default function AdminSidebar() {
       .catch(() => {});
   }, []);
 
-  const isSuperAdmin = currentUser?.role === 'admin' || !currentUser; // default to full during initial mount
+  // Auto-close mobile drawer on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   const allNavItems = [
     { name: 'Dashboard', path: '/admin/dashboard', matchPrefix: ['/admin', '/admin/dashboard'], icon: LayoutDashboard },
@@ -66,18 +73,18 @@ export default function AdminSidebar() {
     return pathname.startsWith(item.path);
   };
 
-  return (
-    <aside className="w-64 bg-[#07080f] border-r border-slate-800/80 flex flex-col justify-between p-4 shrink-0 min-h-screen">
+  // Nav list content
+  const navContent = (
+    <div className="flex flex-col justify-between h-full p-4 space-y-6">
       <div className="space-y-6">
-        
         {/* Header */}
         <div className="flex items-center justify-between px-2 py-3 border-b border-slate-800/80">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/25">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/25 shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-white tracking-wide truncate max-w-[130px]">
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold text-white tracking-wide truncate max-w-[140px]">
                 {currentUser?.name || currentUser?.username || 'CMS Command'}
               </h2>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -91,10 +98,20 @@ export default function AdminSidebar() {
               </div>
             </div>
           </div>
-          <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            {/* Close button inside mobile slide drawer */}
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="md:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+              aria-label="Close sidebar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -106,18 +123,19 @@ export default function AdminSidebar() {
               <Link
                 key={item.path}
                 href={item.path}
+                onClick={() => setMobileOpen(false)}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                   active
-                    ? 'bg-purple-600/15 text-cyan-300 border border-purple-500/30 shadow-sm'
+                    ? 'bg-purple-600/20 text-cyan-300 border border-purple-500/30 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-slate-900/80'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${active ? 'text-cyan-400' : 'text-slate-400'}`} />
-                  <span>{item.name}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-cyan-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.name}</span>
                 </div>
                 {item.isLive && (
-                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse">
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse shrink-0">
                     LIVE
                   </span>
                 )}
@@ -134,16 +152,70 @@ export default function AdminSidebar() {
           target="_blank"
           className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-cyan-400 hover:bg-slate-900 transition-colors"
         >
-          <Globe className="w-4 h-4" /> View Public Site
+          <Globe className="w-4 h-4 shrink-0" /> View Public Site
         </Link>
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition-colors text-left cursor-pointer"
         >
-          <LogOut className="w-4 h-4" /> Logout Session
+          <LogOut className="w-4 h-4 shrink-0" /> Logout Session
         </button>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* ===== MOBILE TOP BAR (< md) ===== */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-[#07080f]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition-colors"
+            aria-label="Open sidebar"
+          >
+            <Menu className="w-5 h-5 text-purple-400" />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white shadow">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <span className="text-sm font-bold text-white tracking-tight">CMS Admin</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href="/"
+            target="_blank"
+            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-300 text-xs flex items-center gap-1.5"
+            title="View Site"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
+      {/* ===== MOBILE SLIDE-OVER DRAWER (< md) ===== */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 md:hidden transition-opacity duration-300"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#07080f] border-r border-slate-800/80 md:hidden transform transition-transform duration-300 ease-in-out ${
+          mobileOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {navContent}
+      </aside>
+
+      {/* ===== DESKTOP SIDEBAR (>= md) ===== */}
+      <aside className="hidden md:flex w-64 bg-[#07080f] border-r border-slate-800/80 flex-col justify-between shrink-0 min-h-screen sticky top-0 h-screen overflow-y-auto">
+        {navContent}
+      </aside>
+    </>
   );
 }
-

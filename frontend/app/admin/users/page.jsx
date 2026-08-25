@@ -250,10 +250,10 @@ export default function AdminUsersPage() {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#07080f] text-slate-100">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#07080f] text-slate-100">
       <AdminSidebar />
 
-      <main className="flex-1 p-6 sm:p-8 space-y-6 overflow-y-auto w-full">
+      <main className="flex-1 pt-20 pb-8 px-4 sm:p-8 space-y-6 overflow-y-auto w-full min-w-0">
         
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
