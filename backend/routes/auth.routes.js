@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 async function authRoutes(fastify, options) {
-  // POST /login — authenticate user via DB
+  // POST /login — authenticate user via DB with env-var fallback
   fastify.post('/login', async (request, reply) => {
     const { username, password } = request.body || {};
 
@@ -12,8 +12,8 @@ async function authRoutes(fastify, options) {
 
     const cleanUsername = username.trim().toLowerCase();
 
+    // ── 1. Primary: MongoDB authentication ──────────────────────────────────
     try {
-      // Find user by username or email (case-insensitive)
       const user = await User.findOne({
         $or: [
           { username: { $regex: new RegExp(`^${username.trim()}$`, 'i') } },
@@ -21,36 +21,66 @@ async function authRoutes(fastify, options) {
         ]
       });
 
-      if (!user) {
-        return reply.code(401).send({ error: true, message: 'Invalid credentials.' });
+      if (user) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+          const token = fastify.jwt.sign(
+            { id: user._id.toString(), username: user.username, email: user.email, role: user.role },
+            { expiresIn: '7d' }
+          );
+          return {
+            success: true,
+            token,
+            user: { id: user._id.toString(), username: user.username, email: user.email, name: user.name, role: user.role }
+          };
+        }
+        // User found in DB but password doesn't match — don't fall through to env-var for security
+        // UNLESS this is the admin username (allow env-var override for admin recovery)
+        if (user.role !== 'admin') {
+          return reply.code(401).send({ error: true, message: 'Invalid credentials.' });
+        }
       }
+    } catch (err) {
+      console.warn('[Auth Login] DB lookup error:', err.message);
+      // DB unavailable — fall through to env-var fallback below
+    }
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return reply.code(401).send({ error: true, message: 'Invalid credentials.' });
+    // ── 2. Fallback: Env-var admin credentials (secure — stored in Render env) ──
+    // This handles: (a) DB down, (b) admin password reset via env vars
+    const envAdminUser = (process.env.ADMIN_USERNAME || 'admin').toLowerCase();
+    const envAdminEmail = (process.env.ADMIN_EMAIL || 'rachitaggarwal1202@gmail.com').toLowerCase();
+    const envAdminPass = process.env.ADMIN_PASSWORD || '';
+
+    const isAdminUsername = cleanUsername === envAdminUser || cleanUsername === envAdminEmail;
+
+    if (isAdminUsername && envAdminPass && password === envAdminPass) {
+      // Auto-sync: update DB password to match env var (so future DB logins work)
+      try {
+        const hashedPass = await bcrypt.hash(envAdminPass, 10);
+        await User.findOneAndUpdate(
+          { $or: [{ username: envAdminUser }, { email: envAdminEmail }] },
+          { $set: { password: hashedPass } },
+          { upsert: false }
+        );
+        console.log('[Auth Login] Admin password synced to DB from env var.');
+      } catch (syncErr) {
+        console.warn('[Auth Login] Could not sync password to DB:', syncErr.message);
       }
 
       const token = fastify.jwt.sign(
-        { id: user._id.toString(), username: user.username, email: user.email, role: user.role },
+        { id: 'admin_env', username: envAdminUser, email: envAdminEmail, role: 'admin' },
         { expiresIn: '7d' }
       );
-
       return {
         success: true,
         token,
-        user: {
-          id: user._id.toString(),
-          username: user.username,
-          email: user.email,
-          name: user.name,
-          role: user.role
-        }
+        user: { id: 'admin_env', username: envAdminUser, email: envAdminEmail, name: 'Rachit Aggarwal', role: 'admin' }
       };
-    } catch (err) {
-      console.error('[Auth Login] DB error:', err.message);
-      return reply.code(503).send({ error: true, message: 'Authentication service unavailable. Please retry.' });
     }
+
+    return reply.code(401).send({ error: true, message: 'Invalid credentials.' });
   });
+
 
   // GET /me — verify token and return current user
   fastify.get('/me', { preHandler: [fastify.authenticate] }, async (request, reply) => {

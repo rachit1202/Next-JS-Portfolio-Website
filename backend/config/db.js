@@ -1,28 +1,36 @@
 const mongoose = require('mongoose');
-const dns = require('dns');
-
-// Use IPv4 first and set Google DNS fallback if local ISP blocks SRV records
-try {
-  dns.setDefaultResultOrder('ipv4first');
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
-} catch (e) {
-  // ignore if restricted
-}
-
-let isConnected = false;
 
 const connectDB = async () => {
   try {
     const connStr = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/rachit_portfolio';
+
     await mongoose.connect(connStr, {
-      serverSelectionTimeoutMS: 10000
+      serverSelectionTimeoutMS: 8000,  // 8s to select a server
+      connectTimeoutMS: 10000,         // 10s for initial connection
+      socketTimeoutMS: 45000,          // 45s for socket operations
+      maxPoolSize: 10,                 // maintain up to 10 socket connections
+      minPoolSize: 2,                  // keep at least 2 connections open
+      heartbeatFrequencyMS: 10000,     // check connection health every 10s
     });
-    isConnected = true;
-    console.log(`[MongoDB] Connected successfully to ${mongoose.connection.host}/${mongoose.connection.name}`);
+
+    console.log(`[MongoDB] Connected to ${mongoose.connection.host}/${mongoose.connection.name}`);
+
+    // Handle disconnections and auto-reconnect
+    mongoose.connection.on('disconnected', () => {
+      console.warn('[MongoDB] Disconnected. Mongoose will auto-reconnect...');
+    });
+
+    mongoose.connection.on('reconnected', () => {
+      console.log('[MongoDB] Reconnected successfully.');
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.error('[MongoDB] Connection error:', err.message);
+    });
+
   } catch (error) {
-    isConnected = false;
     console.error(`[MongoDB Error] Connection failed: ${error.message}`);
-    console.log(`[MongoDB] Operating with fallback memory data mode.`);
+    // Don't crash the server — it will retry on next request
   }
 };
 

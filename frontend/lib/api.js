@@ -1,18 +1,22 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-// Helper for HTTP requests
+// Timeout in ms for all API calls.
+// Server-side (SSR): 5s — fast page render with defaults if backend is cold.
+// Client-side (browser): 12s — allow more time for mutations (saves, uploads).
+const SSR_TIMEOUT_MS = 5000;
+const CLIENT_TIMEOUT_MS = 12000;
+
+// Helper for HTTP requests with timeout
 async function fetchAPI(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
-  const headers = {
-    ...options.headers,
-  };
+  const headers = { ...options.headers };
 
   // Only set Content-Type if there is a body to send
   if (options.body) {
     headers['Content-Type'] = 'application/json';
   }
 
-  // Add auth token if stored in localStorage
+  // Add auth token if stored in localStorage (client-side only)
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('rachit_admin_token');
     if (token) {
@@ -20,23 +24,35 @@ async function fetchAPI(endpoint, options = {}) {
     }
   }
 
+  // Use shorter timeout for SSR (server components) to avoid blocking page render
+  const isBrowser = typeof window !== 'undefined';
+  const timeoutMs = isBrowser ? CLIENT_TIMEOUT_MS : SSR_TIMEOUT_MS;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const res = await fetch(url, {
       ...options,
       headers,
-      cache: options.cache || 'no-store'
+      cache: options.cache || 'no-store',
+      signal: controller.signal,
     });
 
+    clearTimeout(timeoutId);
     const data = await res.json();
     if (!res.ok) {
       throw new Error(data.message || 'API Error');
     }
     return data;
   } catch (error) {
-    console.warn(`[API fetch fallback] ${endpoint}: ${error.message}`);
+    clearTimeout(timeoutId);
+    const isTimeout = error.name === 'AbortError';
+    console.warn(`[API ${isTimeout ? 'TIMEOUT' : 'ERROR'}] ${endpoint}: ${isTimeout ? `No response in ${timeoutMs}ms` : error.message}`);
     throw error;
   }
 }
+
 
 export const api = {
   // Site Configuration & Personal Details (Dynamic CMS)
