@@ -2,6 +2,8 @@ require('dotenv').config();
 const Fastify = require('fastify');
 const cors = require('@fastify/cors');
 const jwt = require('@fastify/jwt');
+const http = require('http');
+const https = require('https');
 const connectDB = require('./config/db');
 const seedData = require('./utils/seed');
 const { authenticate } = require('./middleware/auth');
@@ -75,6 +77,29 @@ const startServer = async () => {
     const port = process.env.PORT || 5000;
     await server.listen({ port: Number(port), host: '0.0.0.0' });
     console.log(`[Fastify Server] Running on http://localhost:${port}`);
+
+    // ── Keep-Alive Self-Ping ─────────────────────────────────────────────────
+    // Render Free Tier spins down servers after 15 min of inactivity.
+    // This pings the health endpoint every 13 minutes to keep the server warm.
+    const RENDER_URL = process.env.RENDER_EXTERNAL_URL || process.env.NEXT_PUBLIC_API_URL?.replace('/api', '');
+    if (RENDER_URL && RENDER_URL.startsWith('http')) {
+      const pingInterval = 13 * 60 * 1000; // 13 minutes
+      const pingUrl = `${RENDER_URL}/api/health`;
+      const pingLib = pingUrl.startsWith('https') ? https : http;
+
+      setInterval(() => {
+        pingLib.get(pingUrl, (res) => {
+          console.log(`[Keep-Alive] Self-ping → ${pingUrl} — ${res.statusCode}`);
+        }).on('error', (err) => {
+          console.warn(`[Keep-Alive] Ping failed: ${err.message}`);
+        });
+      }, pingInterval);
+
+      console.log(`[Keep-Alive] Self-ping active → ${pingUrl} every 13 min`);
+    } else {
+      console.log('[Keep-Alive] RENDER_EXTERNAL_URL not set — self-ping disabled (local dev).');
+    }
+    // ─────────────────────────────────────────────────────────────────────────
   } catch (err) {
     server.log.error(err);
     process.exit(1);

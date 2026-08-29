@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import SiteFooter from '@/components/SiteFooter';
 import ClientLayout from '@/components/ClientLayout';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import BackendWakeup from '@/components/BackendWakeup';
 
 export const metadata = {
   title: 'Rachit Aggarwal | Senior Web Developer & Full-Stack Engineer',
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
+        <BackendWakeup />
       </body>
     </html>
   );
