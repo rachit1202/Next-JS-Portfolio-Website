@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { GithubIcon } from '@/components/Icons';
 
 export default function HomeSlider({ projects = [] }) {
@@ -89,7 +90,7 @@ export default function HomeSlider({ projects = [] }) {
           {displayProjects.map((project, idx) => (
             <div
               key={`${project._id || project.slug || idx}-${idx}`}
-              className="shrink-0 transition-all duration-300 px-1 sm:px-3"
+              className="shrink-0 will-change-transform px-1 sm:px-3"
               style={{
                 width: isMobile ? '100%' : '33.3333%',
                 flex: isMobile ? '0 0 100%' : '0 0 33.3333%',
@@ -98,10 +99,13 @@ export default function HomeSlider({ projects = [] }) {
               <div className="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col h-full group border border-slate-200 dark:border-white/5">
                 {/* Image */}
                 <div className="relative h-48 sm:h-52 overflow-hidden bg-slate-900 shrink-0">
-                  <img
+                  <Image
                     src={project.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800'}
-                    alt={project.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                    alt={project.title || 'Project'}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
                   />
                   <div
                     className="absolute inset-0"

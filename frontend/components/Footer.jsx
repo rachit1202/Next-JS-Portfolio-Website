@@ -109,8 +109,9 @@ export default function Footer() {
                   src="/final-logo.png"
                   alt="Rachit Aggarwal Logo"
                   fill
-                  sizes="500px"
+                  sizes="160px"
                   className="object-contain group-hover:scale-105 transition-transform duration-200"
+                  loading="lazy"
                 />
               </div>
             </Link>

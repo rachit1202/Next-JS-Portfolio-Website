@@ -15,6 +15,7 @@ export default function BlogCard({ blog, variant = 'vertical' }) {
           <img
             src={blog.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=200'}
             alt={blog.title}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         </div>
@@ -38,6 +39,7 @@ export default function BlogCard({ blog, variant = 'vertical' }) {
           <img
             src={blog.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600'}
             alt={blog.title}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, transparent 60%, rgba(0,0,0,0.3) 100%)' }} />

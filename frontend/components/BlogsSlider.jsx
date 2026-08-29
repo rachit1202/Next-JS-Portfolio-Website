@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogsSlider({ blogs = [] }) {
   const displayBlogs = blogs.length > 0 && blogs.length <= 3
@@ -87,7 +88,7 @@ export default function BlogsSlider({ blogs = [] }) {
           {displayBlogs.map((blog, idx) => (
             <div
               key={`${blog._id || blog.slug || idx}-${idx}`}
-              className="shrink-0 transition-all duration-300 px-1 sm:px-3"
+              className="shrink-0 will-change-transform px-1 sm:px-3"
               style={{
                 width: isMobile ? '100%' : '33.3333%',
                 flex: isMobile ? '0 0 100%' : '0 0 33.3333%',
@@ -96,10 +97,13 @@ export default function BlogsSlider({ blogs = [] }) {
               <div className="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col h-full group border border-slate-200 dark:border-white/5">
                 {/* Image */}
                 <div className="relative h-44 sm:h-44 overflow-hidden bg-slate-900">
-                  <img
+                  <Image
                     src={blog.coverImage || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800'}
-                    alt={blog.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    alt={blog.title || 'Blog'}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
                   />
                   <div
                     className="absolute inset-0"

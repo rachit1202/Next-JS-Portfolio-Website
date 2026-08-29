@@ -52,9 +52,10 @@ export default function Navbar() {
               src="/final-logo.png"
               alt="Rachit Aggarwal Logo"
               fill
-              sizes="500px"
+              sizes="120px"
               className="object-contain group-hover:scale-105 transition-transform duration-200"
               priority
+              fetchPriority="high"
             />
           </div>
         </Link>
