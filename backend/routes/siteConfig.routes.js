@@ -1,7 +1,7 @@
 const SiteConfig = require('../models/SiteConfig');
-const mongoose = require('mongoose');
 
-let inMemoryConfig = {
+// Default values used ONLY when creating the very first record in DB
+const defaultConfig = {
   name: 'Rachit Aggarwal',
   title: 'Senior Web Developer & Full-Stack Engineer',
   role: 'Full-Stack Developer',
@@ -20,8 +20,27 @@ let inMemoryConfig = {
   email: 'rachitaggarwal1202@gmail.com',
   phone: '+91 9873088907',
   whatsapp: '+91 9873088907',
-  websiteUrl: 'rachitaggarwal.dev',
+  websiteUrl: 'https://rachitaggarwal.dev',
+  websiteLabel: 'rachitaggarwal.dev',
+  githubUsername: '@rachit1202',
+  linkedinUsername: 'in/rachit-aggarwal-b9492b248',
   leadNotificationEmails: 'aggarwalrachit1202@gmail.com',
+  smtpHost: 'smtp.gmail.com',
+  smtpPort: 465,
+  smtpSecure: true,
+  smtpUser: 'aggarwalrachit1202@gmail.com',
+  smtpPass: '',
+  smtpSenderName: 'Rachit Aggarwal Portfolio',
+  contactFormServices: [
+    'Full-Stack Web Development',
+    'Custom WordPress & PHP Solutions',
+    'UI/UX Design & High-Fidelity Figma',
+    'Cyber Security Hardening & Penetration Testing',
+    'SEO & Search Engine Dominance',
+    'Website Maintenance & Speed Optimization',
+    'Technical Consultation'
+  ],
+  contactFormBudgets: ['Under ₹40K', '₹40K - ₹1.2L', '₹1.2L - ₹2.5L', '₹2.5L+'],
   experienceYears: '3+',
   completedProjects: '25+',
   happyClients: '20+',
@@ -32,9 +51,26 @@ let inMemoryConfig = {
   heroTitleWord1: 'Building',
   heroTitleWord2: 'digital',
   heroTitleWord3: 'excellence.',
-  heroDescription: "I'm Rachit Aggarwal — a full-stack developer with 3+ years crafting fast, elegant, and scalable web applications.",
   ctaHeading: 'Ready to bring your vision to life?',
   ctaSubtitle: "Whether it's a startup MVP, enterprise platform, or WordPress site — let's make it happen.",
+  ctaPrimaryBtn: 'Start a Conversation',
+  ctaSecondaryBtn: 'Explore All Work',
+  projectCtaTagline: '// INTERESTED IN SIMILAR WORK?',
+  projectCtaHeading: 'Need a high-impact platform like {title}?',
+  projectCtaSubtitle: "Let's build something exceptional for your business or startup.",
+  projectCtaPrimaryBtn: 'Start a Conversation',
+  projectCtaSecondaryBtn: 'Explore More Projects',
+  serviceCtaTagline: '// GET STARTED',
+  serviceCtaHeading: 'Ready to build with {title}?',
+  serviceCtaSubtitle: "Let's schedule a quick call to discuss your exact project specs, timeline, and deliverables.",
+  serviceCtaPrimaryBtn: 'Start Your Project',
+  serviceCtaSecondaryBtn: 'Email Directly',
+  footerTagline: "// LET'S COLLABORATE",
+  footerHeading: "Have a project in mind?\nLet's build it together.",
+  footerButtonText: 'Start a Project',
+  footerButtonUrl: '/contact',
+  footerShortBio: 'Senior Web Developer crafting fast, elegant, and scalable digital solutions using Next.js, Node.js, Fastify & WordPress.',
+  footerCopyrightText: '© {year} Rachit Aggarwal. All rights reserved.',
   skills: [
     { name: 'Next.js 14', category: 'Frontend', level: 95, icon: 'Layout' },
     { name: 'React.js', category: 'Frontend', level: 95, icon: 'Code2' },
@@ -109,47 +145,49 @@ let inMemoryConfig = {
 };
 
 async function siteConfigRoutes(fastify, options) {
-  // Public: Get Site Configuration
+  // Public: Get Site Configuration — always from DB
   fastify.get('/', async (request, reply) => {
     try {
-      if (mongoose.connection.readyState === 1) {
-        let config = await SiteConfig.findOne();
-        if (!config) {
-          config = await SiteConfig.create(inMemoryConfig);
-        }
-        return { success: true, data: config };
+      let config = await SiteConfig.findOne().lean();
+      if (!config) {
+        // First time: create the record in DB using defaults
+        config = await SiteConfig.create(defaultConfig);
+        console.log('[SiteConfig] First-time default config created in DB.');
       }
-    } catch (e) {
-      console.warn('[SiteConfig] Returning in-memory fallback:', e.message);
+      return { success: true, data: config };
+    } catch (err) {
+      console.error('[SiteConfig GET] DB error:', err.message);
+      return reply.code(503).send({ success: false, message: 'Database unavailable. Please retry in a moment.' });
     }
-    return { success: true, data: inMemoryConfig };
   });
 
-  // Admin: Update Site Configuration
+  // Admin: Update Site Configuration — always to DB
   fastify.put('/', { preHandler: [fastify.authenticate] }, async (request, reply) => {
     const updateData = { ...(request.body || {}) };
+    // Strip MongoDB internal fields
     delete updateData._id;
     delete updateData.__v;
     delete updateData.createdAt;
     delete updateData.updatedAt;
 
-    inMemoryConfig = { ...inMemoryConfig, ...updateData };
-
     try {
-      if (mongoose.connection.readyState === 1) {
-        let config = await SiteConfig.findOne();
-        if (!config) {
-          config = await SiteConfig.create(inMemoryConfig);
-        } else {
-          config = await SiteConfig.findByIdAndUpdate(config._id, updateData, { new: true, runValidators: true });
-        }
-        return { success: true, message: 'Site configuration updated successfully', data: config };
+      let config = await SiteConfig.findOne();
+      if (!config) {
+        // No record yet — create it with the submitted data merged into defaults
+        config = await SiteConfig.create({ ...defaultConfig, ...updateData });
+        console.log('[SiteConfig] Config record created on first PUT.');
+      } else {
+        config = await SiteConfig.findByIdAndUpdate(
+          config._id,
+          { $set: updateData },
+          { new: true, runValidators: false }
+        );
       }
-    } catch (e) {
-      console.warn('[SiteConfig] DB update failed, updated in-memory:', e.message);
+      return { success: true, message: 'Site configuration updated successfully.', data: config };
+    } catch (err) {
+      console.error('[SiteConfig PUT] DB error:', err.message);
+      return reply.code(500).send({ success: false, message: 'Failed to save configuration: ' + err.message });
     }
-
-    return { success: true, message: 'Site configuration updated successfully (in-memory)', data: inMemoryConfig };
   });
 }
 

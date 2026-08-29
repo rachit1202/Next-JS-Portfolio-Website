@@ -107,6 +107,27 @@ export default function AdminSettingsPage() {
     }
   };
 
+  // About Bio paragraphs management
+  const addBioParagraph = () => {
+    setConfig({
+      ...config,
+      aboutBio: [...(config.aboutBio || []), '']
+    });
+  };
+
+  const updateBioParagraph = (index, value) => {
+    const updated = [...(config.aboutBio || [])];
+    updated[index] = value;
+    setConfig({ ...config, aboutBio: updated });
+  };
+
+  const removeBioParagraph = (index) => {
+    setConfig({
+      ...config,
+      aboutBio: (config.aboutBio || []).filter((_, i) => i !== index)
+    });
+  };
+
   // Skill management
   const addSkill = () => {
     setConfig({
@@ -150,6 +171,26 @@ export default function AdminSettingsPage() {
   const updateExperience = (index, field, value) => {
     const updated = [...(config.experiences || [])];
     updated[index][field] = value;
+    setConfig({ ...config, experiences: updated });
+  };
+
+  const addHighlight = (expIndex) => {
+    const updated = [...(config.experiences || [])];
+    updated[expIndex].highlights = [...(updated[expIndex].highlights || []), ''];
+    setConfig({ ...config, experiences: updated });
+  };
+
+  const updateHighlight = (expIndex, hlIndex, value) => {
+    const updated = [...(config.experiences || [])];
+    const highlights = [...(updated[expIndex].highlights || [])];
+    highlights[hlIndex] = value;
+    updated[expIndex].highlights = highlights;
+    setConfig({ ...config, experiences: updated });
+  };
+
+  const removeHighlight = (expIndex, hlIndex) => {
+    const updated = [...(config.experiences || [])];
+    updated[expIndex].highlights = (updated[expIndex].highlights || []).filter((_, i) => i !== hlIndex);
     setConfig({ ...config, experiences: updated });
   };
 
@@ -378,6 +419,48 @@ export default function AdminSettingsPage() {
                     onChange={(e) => setConfig({ ...config, aboutHeadline: e.target.value })}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-400"
                   />
+                </div>
+
+                {/* About Bio Paragraphs Editor */}
+                <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">About Page Bio Paragraphs</span>
+                    <button
+                      type="button"
+                      onClick={addBioParagraph}
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/30 text-[10px] font-bold cursor-pointer transition-all"
+                    >
+                      <Plus className="w-3 h-3" /> Add Paragraph
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-500 leading-relaxed">These paragraphs appear in the About Me section on the /about page. Each entry is a separate paragraph.</p>
+                  <div className="space-y-2">
+                    {(config.aboutBio || []).map((para, idx) => (
+                      <div key={idx} className="flex gap-2 items-start">
+                        <div className="flex-shrink-0 w-5 h-5 mt-2 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-[9px] font-bold text-purple-300">
+                          {idx + 1}
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={para}
+                          onChange={(e) => updateBioParagraph(idx, e.target.value)}
+                          placeholder={`Paragraph ${idx + 1}...`}
+                          className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-white text-xs focus:outline-none focus:border-cyan-400 resize-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeBioParagraph(idx)}
+                          className="flex-shrink-0 mt-1.5 p-1.5 text-rose-400 hover:bg-rose-500/10 rounded-lg cursor-pointer"
+                          title="Remove paragraph"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                    {(!config.aboutBio || config.aboutBio.length === 0) && (
+                      <p className="text-center text-slate-500 text-[11px] py-4">No paragraphs yet. Click &ldquo;Add Paragraph&rdquo; to begin.</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -1226,6 +1309,42 @@ export default function AdminSettingsPage() {
                       onChange={(e) => updateExperience(idx, 'description', e.target.value)}
                       className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white"
                     />
+
+                    {/* Highlights / Bullet Points */}
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Key Highlights (Bullet Points)</span>
+                        <button
+                          type="button"
+                          onClick={() => addHighlight(idx)}
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-[9px] font-bold cursor-pointer transition-all"
+                        >
+                          <Plus className="w-2.5 h-2.5" /> Add Highlight
+                        </button>
+                      </div>
+                      {(exp.highlights || []).map((hl, hlIdx) => (
+                        <div key={hlIdx} className="flex gap-2 items-center">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
+                          <input
+                            type="text"
+                            value={hl}
+                            onChange={(e) => updateHighlight(idx, hlIdx, e.target.value)}
+                            placeholder="e.g. Next.js & Fastify microservices"
+                            className="flex-1 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-white text-[11px]"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeHighlight(idx, hlIdx)}
+                            className="p-1 text-rose-400 hover:bg-rose-500/10 rounded-lg cursor-pointer shrink-0"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                      {(!exp.highlights || exp.highlights.length === 0) && (
+                        <p className="text-[10px] text-slate-600 italic">No highlights yet. Add bullet points shown below the experience description.</p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
