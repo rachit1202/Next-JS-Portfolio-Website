@@ -12,23 +12,33 @@ const seedData = async () => {
     return;
   }
   try {
-    // 1. Seed Admin User
+    // 1. Seed / Sync Admin User
+    const defaultUsername = process.env.ADMIN_USERNAME || 'admin';
+    const defaultPassword = process.env.ADMIN_PASSWORD || 'adminpass123';
+    const defaultEmail    = process.env.ADMIN_EMAIL    || 'rachitaggarwal1202@gmail.com';
+
     const adminExists = await User.findOne({ role: 'admin' });
     if (!adminExists) {
-      const defaultUsername = process.env.ADMIN_USERNAME || 'admin';
-      const defaultPassword = process.env.ADMIN_PASSWORD || 'adminpass123';
-      const defaultEmail = process.env.ADMIN_EMAIL || 'rachitaggarwal1202@gmail.com';
+      // First time: create admin
       const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-
       await User.create({
         username: defaultUsername,
-        email: defaultEmail,
+        email:    defaultEmail,
         password: hashedPassword,
-        name: 'Rachit Aggarwal',
-        role: 'admin'
+        name:     'Rachit Aggarwal',
+        role:     'admin'
       });
       console.log('[Seed] Admin user created with username:', defaultUsername);
+    } else if (process.env.ADMIN_PASSWORD) {
+      // Env var is explicitly set — always sync password to DB so it stays consistent
+      const isMatch = await bcrypt.compare(defaultPassword, adminExists.password);
+      if (!isMatch) {
+        const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+        await User.findByIdAndUpdate(adminExists._id, { password: hashedPassword });
+        console.log('[Seed] Admin password synced from ADMIN_PASSWORD env var.');
+      }
     }
+
 
     // 2. Seed SEO Configuration
     const seoExists = await SeoConfig.findOne();
