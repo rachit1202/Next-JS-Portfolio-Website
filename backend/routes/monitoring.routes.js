@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const db = require('../config/db');
 
 async function monitoringRoutes(fastify, options) {
   // Public / Admin: Live Health & System Metrics
@@ -22,6 +23,8 @@ async function monitoringRoutes(fastify, options) {
       }
     } else if (mongoose.connection.readyState === 2) {
       dbStatus = 'connecting';
+    } else {
+      dbStatus = 'disconnected: ' + (db.getLastError ? db.getLastError() : 'No connection established');
     }
 
     const memoryUsage = process.memoryUsage();
