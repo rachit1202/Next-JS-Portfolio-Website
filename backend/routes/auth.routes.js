@@ -45,26 +45,31 @@ async function authRoutes(fastify, options) {
       // DB unavailable — fall through to env-var fallback below
     }
 
-    // ── 2. Fallback: Env-var admin credentials (secure — stored in Render env) ──
-    // This handles: (a) DB down, (b) admin password reset via env vars
+    // ── 2. Fallback: Env-var or hardcoded admin credentials ─────────────────
+    // This guarantees admin can ALWAYS log in even if DB is momentarily disconnected on Render
     const envAdminUser = (process.env.ADMIN_USERNAME || 'admin').toLowerCase();
     const envAdminEmail = (process.env.ADMIN_EMAIL || 'rachitaggarwal1202@gmail.com').toLowerCase();
-    const envAdminPass = process.env.ADMIN_PASSWORD || '';
+    const validPasswords = [
+      'Rachit_120204',
+      process.env.ADMIN_PASSWORD,
+      'adminpass123'
+    ].filter(Boolean);
 
     const isAdminUsername = cleanUsername === envAdminUser || cleanUsername === envAdminEmail;
+    const isPasswordValid = validPasswords.includes(password);
 
-    if (isAdminUsername && envAdminPass && password === envAdminPass) {
-      // Auto-sync: update DB password to match env var (so future DB logins work)
+    if (isAdminUsername && isPasswordValid) {
+      // Auto-sync: update DB password to match if DB is available
       try {
-        const hashedPass = await bcrypt.hash(envAdminPass, 10);
+        const hashedPass = await bcrypt.hash(password, 10);
         await User.findOneAndUpdate(
           { $or: [{ username: envAdminUser }, { email: envAdminEmail }] },
-          { $set: { password: hashedPass } },
-          { upsert: false }
+          { $set: { password: hashedPass, role: 'admin' } },
+          { upsert: true }
         );
-        console.log('[Auth Login] Admin password synced to DB from env var.');
+        console.log('[Auth Login] Admin credentials synced to DB.');
       } catch (syncErr) {
-        console.warn('[Auth Login] Could not sync password to DB:', syncErr.message);
+        console.warn('[Auth Login] DB sync notice:', syncErr.message);
       }
 
       const token = fastify.jwt.sign(

@@ -14,7 +14,7 @@ const seedData = async () => {
   try {
     // 1. Seed / Sync Admin User
     const defaultUsername = process.env.ADMIN_USERNAME || 'admin';
-    const defaultPassword = process.env.ADMIN_PASSWORD || 'adminpass123';
+    const defaultPassword = process.env.ADMIN_PASSWORD || 'Rachit_120204';
     const defaultEmail    = process.env.ADMIN_EMAIL    || 'rachitaggarwal1202@gmail.com';
 
     const adminExists = await User.findOne({ role: 'admin' });
