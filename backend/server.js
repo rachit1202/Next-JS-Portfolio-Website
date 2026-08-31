@@ -43,6 +43,14 @@ const startServer = async () => {
     // Decorate Fastify instance with authenticate hook
     server.decorate('authenticate', authenticate);
 
+    // Auto-connect DB if momentarily disconnected
+    server.addHook('onRequest', async () => {
+      const mongoose = require('mongoose');
+      if (mongoose.connection.readyState !== 1) {
+        await connectDB();
+      }
+    });
+
     // Global Error Handler to guarantee CORS headers on error responses (401, 400, 500)
     server.setErrorHandler((error, request, reply) => {
       reply.header('Access-Control-Allow-Origin', '*');
