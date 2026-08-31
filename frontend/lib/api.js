@@ -195,6 +195,7 @@ export const defaultSiteConfig = {
   heroTitleWord1: 'Building',
   heroTitleWord2: 'digital',
   heroTitleWord3: 'excellence.',
+  heroDescription: 'Senior Web Developer with 3+ years crafting fast, elegant, and scalable web applications.',
   ctaHeading: 'Ready to bring your vision to life?',
   ctaSubtitle: "Whether it's a startup MVP, enterprise platform, or WordPress site — let's make it happen.",
   ctaPrimaryBtn: 'Start a Conversation',

@@ -56,6 +56,8 @@ const siteConfigSchema = new mongoose.Schema(
     heroTitleWord1: { type: String, default: 'Building' },
     heroTitleWord2: { type: String, default: 'digital' },
     heroTitleWord3: { type: String, default: 'excellence.' },
+    heroDescription: { type: String, default: 'Senior Web Developer with 3+ years crafting fast, elegant, and scalable web applications.' },
+
     // CTA Banners Configuration
     ctaHeading: { type: String, default: 'Ready to bring your vision to life?' },
     ctaSubtitle: { type: String, default: "Whether it's a startup MVP, enterprise platform, or WordPress site — let's make it happen." },
@@ -118,7 +120,7 @@ const siteConfigSchema = new mongoose.Schema(
       }
     ]
   },
-  { timestamps: true }
+  { timestamps: true, strict: false }
 );
 
 module.exports = mongoose.model('SiteConfig', siteConfigSchema);
