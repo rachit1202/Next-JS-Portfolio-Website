@@ -1,10 +1,10 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-// Timeout in ms for all API calls.
+// Timeout in ms for API calls.
 // Server-side (SSR): 5s — fast page render with defaults if backend is cold.
-// Client-side (browser): 12s — allow more time for mutations (saves, uploads).
+// Client-side (browser): 60s — gives ample time for Render free tier spin-up on login & saves.
 const SSR_TIMEOUT_MS = 5000;
-const CLIENT_TIMEOUT_MS = 12000;
+const CLIENT_TIMEOUT_MS = 60000;
 
 // Helper for HTTP requests with timeout
 async function fetchAPI(endpoint, options = {}) {
@@ -48,6 +48,9 @@ async function fetchAPI(endpoint, options = {}) {
   } catch (error) {
     clearTimeout(timeoutId);
     const isTimeout = error.name === 'AbortError';
+    if (isTimeout && isBrowser) {
+      throw new Error('Server took too long to respond. It may be waking up, please retry.');
+    }
     console.warn(`[API ${isTimeout ? 'TIMEOUT' : 'ERROR'}] ${endpoint}: ${isTimeout ? `No response in ${timeoutMs}ms` : error.message}`);
     throw error;
   }
