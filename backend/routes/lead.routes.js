@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const Lead = require('../models/Lead');
 const { sendLeadNotificationEmail } = require('../utils/mailer');
 
-let inMemoryLeads = [];
-
 async function leadRoutes(fastify, options) {
   // Public: Submit contact form lead
   fastify.post('/', async (request, reply) => {
@@ -28,32 +26,8 @@ async function leadRoutes(fastify, options) {
     const finalPageUrl = pageUrl || request.headers['referer'] || 'https://rachitaggarwal.dev/contact';
     const finalSubject = subject || `${serviceNeeded || 'Project Inquiry'} - ${name}`;
 
-    let createdLeadDoc = null;
-
-    if (mongoose.connection.readyState === 1) {
-      try {
-        const newLead = await Lead.create({
-          name,
-          email,
-          phone: phone || '',
-          subject: finalSubject,
-          serviceNeeded: serviceNeeded || 'General Inquiry',
-          budget: budget || 'Flexible',
-          message,
-          ipAddress,
-          pageUrl: finalPageUrl,
-          userAgent,
-          status: 'New'
-        });
-        createdLeadDoc = newLead;
-      } catch (e) {
-        console.warn('[Lead Submit Error] DB failed:', e.message);
-      }
-    }
-
-    if (!createdLeadDoc) {
-      createdLeadDoc = {
-        _id: `lead_${Date.now()}`,
+    try {
+      const createdLead = await Lead.create({
         name,
         email,
         phone: phone || '',
@@ -64,64 +38,70 @@ async function leadRoutes(fastify, options) {
         ipAddress,
         pageUrl: finalPageUrl,
         userAgent,
-        status: 'New',
-        createdAt: new Date()
-      };
-      inMemoryLeads.unshift(createdLeadDoc);
+        status: 'New'
+      });
+
+      // Send async email notification (non-blocking)
+      sendLeadNotificationEmail(createdLead).catch((emailErr) => {
+        console.warn('[Email Dispatch Warning] Could not send lead notification email:', emailErr.message);
+      });
+
+      return reply.code(201).send({
+        success: true,
+        message: 'Thank you! Your message has been received. Rachit will get back to you shortly.',
+        data: createdLead
+      });
+    } catch (err) {
+      console.error('[Lead Submit Error] DB failed:', err.message);
+      return reply.code(500).send({ error: true, message: 'Failed to submit inquiry to DB: ' + err.message });
     }
-
-    // Trigger instant email notification in background (non-blocking)
-    sendLeadNotificationEmail(createdLeadDoc).catch(err => {
-      console.error('[Lead Routes] Mail notification background error:', err.message);
-    });
-
-    return reply.code(201).send({
-      success: true,
-      message: 'Thank you! Your inquiry has been received. Rachit Aggarwal will get back to you shortly.',
-      leadId: createdLeadDoc._id
-    });
   });
 
-  // Admin: Send test email to verify SMTP configuration
-  fastify.post('/test-email', { preHandler: [fastify.authenticate] }, async (request, reply) => {
-    const { targetEmail, customConfig } = request.body || {};
-    const { sendTestEmail } = require('../utils/mailer');
-    const result = await sendTestEmail(targetEmail, customConfig);
-    if (!result.success) {
-      return reply.code(400).send({ error: true, message: result.error });
-    }
-    return { success: true, message: `Test email sent successfully to ${result.recipient}!`, messageId: result.messageId };
-  });
-
-  // Admin: Get all lead submissions
+  // Admin: Get all leads with status statistics and filtering
   fastify.get('/', { preHandler: [fastify.authenticate] }, async (request, reply) => {
-    if (mongoose.connection.readyState === 1) {
-      try {
-        const leads = await Lead.find().sort({ createdAt: -1 });
-        const stats = {
-          total: leads.length,
-          newCount: leads.filter(l => l.status === 'New').length,
-          inProgressCount: leads.filter(l => l.status === 'In Progress').length,
-          contactedCount: leads.filter(l => l.status === 'Contacted').length,
-          closedCount: leads.filter(l => l.status === 'Closed').length
-        };
-        return { success: true, stats, count: leads.length, data: leads };
-      } catch (e) {
-        console.warn('[Admin Leads Error] DB failed, using memory fallback:', e.message);
-      }
-    }
+    try {
+      const { status, search } = request.query || {};
+      const query = {};
 
-    const stats = {
-      total: inMemoryLeads.length,
-      newCount: inMemoryLeads.filter(l => l.status === 'New').length,
-      inProgressCount: inMemoryLeads.filter(l => l.status === 'In Progress').length,
-      contactedCount: inMemoryLeads.filter(l => l.status === 'Contacted').length,
-      closedCount: inMemoryLeads.filter(l => l.status === 'Closed').length
-    };
-    return { success: true, stats, count: inMemoryLeads.length, data: inMemoryLeads };
+      if (status && status !== 'All') {
+        query.status = status;
+      }
+
+      if (search) {
+        query.$or = [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+          { message: { $regex: search, $options: 'i' } },
+          { subject: { $regex: search, $options: 'i' } }
+        ];
+      }
+
+      const [leads, allLeads] = await Promise.all([
+        Lead.find(query).sort({ createdAt: -1 }),
+        Lead.find({}, 'status')
+      ]);
+
+      const stats = {
+        total: allLeads.length,
+        newCount: allLeads.filter(l => l.status === 'New').length,
+        inProgressCount: allLeads.filter(l => l.status === 'In Progress').length,
+        contactedCount: allLeads.filter(l => l.status === 'Contacted').length,
+        closedCount: allLeads.filter(l => l.status === 'Closed').length
+      };
+
+      return {
+        success: true,
+        stats,
+        count: leads.length,
+        data: leads
+      };
+    } catch (err) {
+      console.error('[Leads GET] DB error:', err.message);
+      return reply.code(503).send({ success: false, message: 'Database error: ' + err.message, data: [], stats: { total: 0, newCount: 0, inProgressCount: 0, contactedCount: 0, closedCount: 0 } });
+    }
   });
 
-  // Admin: Update lead status or internal notes
+  // Admin: Update lead status and internal notes
   fastify.patch('/:id', { preHandler: [fastify.authenticate] }, async (request, reply) => {
     const { id } = request.params;
     const { status, notes } = request.body || {};
@@ -130,39 +110,32 @@ async function leadRoutes(fastify, options) {
     if (status) updateObj.status = status;
     if (notes !== undefined) updateObj.notes = notes;
 
-    if (mongoose.connection.readyState === 1) {
-      try {
-        const lead = await Lead.findByIdAndUpdate(id, updateObj, { new: true });
-        if (lead) return { success: true, data: lead };
-      } catch (e) {
-        console.warn('[Lead Update Error] DB failed:', e.message);
+    try {
+      const updated = await Lead.findByIdAndUpdate(id, { $set: updateObj }, { new: true, runValidators: true });
+      if (!updated) {
+        return reply.code(404).send({ error: true, message: 'Lead not found in DB.' });
       }
+      return { success: true, message: 'Lead updated successfully in DB.', data: updated };
+    } catch (err) {
+      console.error('[Lead PATCH] DB error:', err.message);
+      return reply.code(500).send({ error: true, message: 'Failed to update lead in DB: ' + err.message });
     }
-
-    const index = inMemoryLeads.findIndex(l => l._id === id);
-    if (index !== -1) {
-      inMemoryLeads[index] = { ...inMemoryLeads[index], ...updateObj };
-      return { success: true, data: inMemoryLeads[index] };
-    }
-
-    return reply.code(404).send({ error: true, message: 'Lead not found.' });
   });
 
   // Admin: Delete lead
   fastify.delete('/:id', { preHandler: [fastify.authenticate] }, async (request, reply) => {
     const { id } = request.params;
 
-    if (mongoose.connection.readyState === 1) {
-      try {
-        const lead = await Lead.findByIdAndDelete(id);
-        if (lead) return { success: true, message: 'Lead removed successfully.' };
-      } catch (e) {
-        console.warn('[Lead Delete Error] DB failed:', e.message);
+    try {
+      const deleted = await Lead.findByIdAndDelete(id);
+      if (!deleted) {
+        return reply.code(404).send({ error: true, message: 'Lead not found in DB.' });
       }
+      return { success: true, message: 'Lead deleted successfully from DB.' };
+    } catch (err) {
+      console.error('[Lead DELETE] DB error:', err.message);
+      return reply.code(500).send({ error: true, message: 'Failed to delete lead from DB: ' + err.message });
     }
-
-    inMemoryLeads = inMemoryLeads.filter(l => l._id !== id);
-    return { success: true, message: 'Lead removed successfully.' };
   });
 }
 
