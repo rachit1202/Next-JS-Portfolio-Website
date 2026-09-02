@@ -7,8 +7,16 @@ import TechArsenal from '@/components/TechArsenal';
 import WhyMe from '@/components/WhyMe';
 import ScrollReveal from '@/components/ScrollReveal';
 import { api, defaultSiteConfig } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
 export const revalidate = 60;
+
+export async function generateMetadata() {
+  return getPageMetadata('home', {
+    title: 'Rachit Aggarwal | Senior Web Developer & Full-Stack Engineer',
+    description: 'Official portfolio & website of Rachit Aggarwal. Senior Web Developer specializing in Next.js, Node.js, Fastify, MongoDB, PHP, and scalable digital solutions.'
+  });
+}
 
 export default async function HomePage() {
   const [projectsRes, blogsRes, servicesRes, siteConfigRes] = await Promise.allSettled([

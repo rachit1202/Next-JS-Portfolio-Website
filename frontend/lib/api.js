@@ -62,8 +62,9 @@ export const api = {
   getSiteConfig: () => fetchAPI('/site-config').catch(() => ({ success: true, data: defaultSiteConfig })),
   updateSiteConfig: (data) => fetchAPI('/site-config', { method: 'PUT', body: JSON.stringify(data) }),
 
-  // SEO
+  // SEO & Page Metadata
   getSeo: () => fetchAPI('/seo').catch(() => ({ success: true, data: defaultSeo })),
+  getPageSeo: (key) => fetchAPI(`/seo/page/${key}`).catch(() => ({ success: true, data: defaultSeo.pages?.find(p => p.pageKey === key) || null, global: defaultSeo })),
   updateSeo: (data) => fetchAPI('/seo', { method: 'PUT', body: JSON.stringify(data) }),
 
   // Projects
@@ -294,9 +295,70 @@ const defaultSeo = {
   defaultTitle: 'Rachit Aggarwal - Senior Full-Stack & MERN Developer',
   defaultDescription: 'Official portfolio & website of Rachit Aggarwal. Senior Web Developer specializing in Next.js, Node.js, Fastify, MongoDB, PHP, and scalable digital solutions.',
   keywords: ['Rachit Aggarwal', 'Senior Web Developer', 'Full-Stack Developer', 'Next.js', 'Fastify', 'MERN Stack'],
+  author: 'Rachit Aggarwal',
+  ogImage: '/final-logo.png',
+  twitterHandle: '@rachitaggarwal',
+  linkedinUrl: 'https://www.linkedin.com/in/rachit-aggarwal-b9492b248/',
+  githubUrl: 'https://github.com/rachit1202',
   contactEmail: 'rachitaggarwal1202@gmail.com',
   contactPhone: '+91 9873088907',
-  location: 'Rohini, New Delhi, India'
+  location: 'Rohini, New Delhi, India',
+  pages: [
+    {
+      pageKey: 'home',
+      pageName: 'Home Page',
+      path: '/',
+      title: 'Rachit Aggarwal | Senior Web Developer & Full-Stack Engineer',
+      description: 'Official portfolio & website of Rachit Aggarwal. Senior Web Developer specializing in Next.js, Node.js, Fastify, MongoDB, PHP, and scalable digital solutions.',
+      keywords: ['Rachit Aggarwal', 'Senior Web Developer', 'Full-Stack Developer', 'Next.js', 'Fastify', 'MERN Stack'],
+      ogImage: '/final-logo.png'
+    },
+    {
+      pageKey: 'about',
+      pageName: 'About Me',
+      path: '/about',
+      title: 'About Rachit Aggarwal | Senior Web Developer & Architect',
+      description: 'Career journey, work experiences, technical capability, education, and development approach of Rachit Aggarwal.',
+      keywords: ['About Rachit Aggarwal', 'Full-Stack Developer Bio', 'Web Developer Experience'],
+      ogImage: '/final-logo.png'
+    },
+    {
+      pageKey: 'projects',
+      pageName: 'Projects Portfolio',
+      path: '/projects',
+      title: 'Projects Portfolio | Rachit Aggarwal — Selected Work',
+      description: 'Browse featured web applications, WordPress platforms, enterprise portals, and Fastify REST API backends engineered by Rachit Aggarwal.',
+      keywords: ['Web Projects', 'Next.js Portfolio', 'Full-Stack Applications'],
+      ogImage: '/final-logo.png'
+    },
+    {
+      pageKey: 'services',
+      pageName: 'Services & Capabilities',
+      path: '/services',
+      title: 'Services | Rachit Aggarwal — Web Development & Design Solutions',
+      description: 'Full-Stack Next.js development, Fastify API microservices, custom WordPress solutions, UI/UX design, SEO optimization and more by Rachit Aggarwal.',
+      keywords: ['Web Development Services', 'Hire Next.js Developer', 'Custom WordPress Development'],
+      ogImage: '/final-logo.png'
+    },
+    {
+      pageKey: 'blogs',
+      pageName: 'Tech Blog & Insights',
+      path: '/blogs',
+      title: 'Tech Blog | Rachit Aggarwal — Thoughts & Tutorials',
+      description: 'In-depth articles on modern web development, Next.js 14, Fastify APIs, Node.js performance, MongoDB optimization, and SEO best practices.',
+      keywords: ['Web Development Blog', 'Next.js Tutorials', 'Node.js Performance'],
+      ogImage: '/final-logo.png'
+    },
+    {
+      pageKey: 'contact',
+      pageName: 'Contact & Inquiries',
+      path: '/contact',
+      title: 'Contact Rachit Aggarwal | Get In Touch & Hire',
+      description: 'Get in touch with Rachit Aggarwal for custom software development, freelance projects, technical consulting, or collaborations.',
+      keywords: ['Contact Rachit Aggarwal', 'Hire Web Developer', 'Freelance Inquiry Delhi'],
+      ogImage: '/final-logo.png'
+    }
+  ]
 };
 
 const defaultServices = [

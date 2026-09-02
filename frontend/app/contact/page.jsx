@@ -3,11 +3,14 @@ import { Mail, Phone, MapPin, Globe, Clock, Send, MessageSquare } from 'lucide-r
 import { GithubIcon, LinkedinIcon } from '@/components/Icons';
 import ScrollReveal from '@/components/ScrollReveal';
 import { api, defaultSiteConfig } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
-export const metadata = {
-  title: 'Contact Rachit Aggarwal | Get In Touch',
-  description: 'Get in touch with Rachit Aggarwal for custom full-stack web development, WordPress CMS, Fastify API development, or technical consulting.'
-};
+export async function generateMetadata() {
+  return getPageMetadata('contact', {
+    title: 'Contact Rachit Aggarwal | Get In Touch',
+    description: 'Get in touch with Rachit Aggarwal for custom full-stack web development, WordPress CMS, Fastify API development, or technical consulting.'
+  });
+}
 
 export default async function ContactPage() {
   const siteConfigRes = await api.getSiteConfig().catch(() => null);

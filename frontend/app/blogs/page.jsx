@@ -1,10 +1,13 @@
 import BlogsPageClient from '@/components/BlogsPageClient';
 import { api } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
-export const metadata = {
-  title: 'Tech Blog | Rachit Aggarwal — Thoughts & Tutorials',
-  description: 'In-depth articles on web development, Next.js, Fastify APIs, Node.js performance, MongoDB optimization, and SEO best practices.'
-};
+export async function generateMetadata() {
+  return getPageMetadata('blogs', {
+    title: 'Tech Blog | Rachit Aggarwal — Thoughts & Tutorials',
+    description: 'In-depth articles on web development, Next.js, Fastify APIs, Node.js performance, MongoDB optimization, and SEO best practices.'
+  });
+}
 
 export default async function BlogsPage({ searchParams }) {
   const resolvedSearchParams = (await searchParams) || {};

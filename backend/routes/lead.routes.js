@@ -1,8 +1,23 @@
 const mongoose = require('mongoose');
 const Lead = require('../models/Lead');
-const { sendLeadNotificationEmail } = require('../utils/mailer');
+const { sendLeadNotificationEmail, sendTestEmail } = require('../utils/mailer');
 
 async function leadRoutes(fastify, options) {
+  // Admin: Send test email to verify SMTP configuration
+  fastify.post('/test-email', { preHandler: [fastify.authenticate] }, async (request, reply) => {
+    const { targetEmail, customConfig } = request.body || {};
+    try {
+      const result = await sendTestEmail(targetEmail, customConfig);
+      if (!result.success) {
+        return reply.code(400).send({ success: false, message: result.error || 'Failed to send test email.' });
+      }
+      return { success: true, message: `Test email successfully delivered to ${result.recipient}!` };
+    } catch (err) {
+      console.error('[Test Email Error]:', err.message);
+      return reply.code(500).send({ success: false, message: err.message });
+    }
+  });
+
   // Public: Submit contact form lead
   fastify.post('/', async (request, reply) => {
     const { name, email, phone, subject, serviceNeeded, budget, message, pageUrl } = request.body || {};

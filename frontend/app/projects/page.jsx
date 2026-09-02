@@ -1,10 +1,13 @@
 import ProjectsPageClient from '@/components/ProjectsPageClient';
 import { api } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
-export const metadata = {
-  title: 'Projects Portfolio | Rachit Aggarwal — Selected Work',
-  description: 'Browse web applications, WordPress developments, MERN stack platforms, and Fastify REST API backends engineered by Rachit Aggarwal.'
-};
+export async function generateMetadata() {
+  return getPageMetadata('projects', {
+    title: 'Projects Portfolio | Rachit Aggarwal — Selected Work',
+    description: 'Browse web applications, WordPress developments, MERN stack platforms, and Fastify REST API backends engineered by Rachit Aggarwal.'
+  });
+}
 
 export default async function ProjectsPage({ searchParams }) {
   const resolvedSearchParams = (await searchParams) || {};

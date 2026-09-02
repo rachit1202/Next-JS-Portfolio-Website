@@ -1,10 +1,13 @@
 import ServicesTabs from '@/components/ServicesTabs';
 import { api } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
-export const metadata = {
-  title: 'Services | Rachit Aggarwal — Web Development & Design Solutions',
-  description: 'Full-Stack Next.js development, Fastify API microservices, custom WordPress solutions, UI/UX design, SEO optimization and more by Rachit Aggarwal.'
-};
+export async function generateMetadata() {
+  return getPageMetadata('services', {
+    title: 'Services | Rachit Aggarwal — Web Development & Design Solutions',
+    description: 'Full-Stack Next.js development, Fastify API microservices, custom WordPress solutions, UI/UX design, SEO optimization and more by Rachit Aggarwal.'
+  });
+}
 
 export default async function ServicesPage() {
   const servicesRes = await api.getServices().catch(() => ({ data: [] }));

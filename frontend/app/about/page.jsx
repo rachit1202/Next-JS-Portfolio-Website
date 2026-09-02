@@ -2,11 +2,14 @@ import Link from 'next/link';
 import { Briefcase, GraduationCap, Mail, ArrowRight, ChevronRight, Download, MapPin, Phone, CheckCircle2, Sparkles } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { api, defaultSiteConfig } from '@/lib/api';
+import { getPageMetadata } from '@/lib/seoHelper';
 
-export const metadata = {
-  title: 'About Rachit Aggarwal | Senior Web Developer',
-  description: 'Career overview, work experience, education, and technical capabilities of Rachit Aggarwal. Full-Stack developer specializing in Next.js, Fastify, Node.js, and WordPress.'
-};
+export async function generateMetadata() {
+  return getPageMetadata('about', {
+    title: 'About Rachit Aggarwal | Senior Web Developer & Architect',
+    description: 'Career overview, work experience, education, and technical capabilities of Rachit Aggarwal. Full-Stack developer specializing in Next.js, Fastify, Node.js, and WordPress.'
+  });
+}
 
 export default async function AboutPage() {
   const siteConfigRes = await api.getSiteConfig().catch(() => null);
