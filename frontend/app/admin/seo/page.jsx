@@ -37,55 +37,61 @@ const DEFAULT_PAGES = [
     pageKey: 'home',
     pageName: 'Home Page',
     path: '/',
-    title: 'Rachit Aggarwal | Senior Web Developer & Full-Stack Engineer',
-    description: 'Official portfolio & website of Rachit Aggarwal. Senior Web Developer specializing in Next.js, Node.js, Fastify, MongoDB, PHP, and scalable digital solutions.',
-    keywords: ['Rachit Aggarwal', 'Senior Web Developer', 'Full-Stack Developer', 'Next.js', 'Fastify', 'MERN Stack', 'WordPress'],
-    ogImage: '/final-logo.png'
+    title: 'Rachit Aggarwal | Senior Full-Stack & Next.js Web Developer',
+    description: 'Official portfolio of Rachit Aggarwal — Senior Full-Stack Developer specializing in high-performance Next.js web applications, Fastify REST APIs, and scalable web solutions.',
+    keywords: ['Rachit Aggarwal', 'Senior Web Developer', 'Full-Stack Developer', 'Next.js Developer Delhi', 'Fastify Backend Developer', 'MERN Stack Developer', 'WordPress Developer India'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/'
   },
   {
     pageKey: 'about',
     pageName: 'About Me',
     path: '/about',
-    title: 'About Rachit Aggarwal | Senior Web Developer & Architect',
-    description: 'Career journey, work experiences, technical capability, education, and development approach of Rachit Aggarwal.',
-    keywords: ['About Rachit Aggarwal', 'Full-Stack Developer Bio', 'Web Developer Experience', 'Frontend Backend Skills'],
-    ogImage: '/final-logo.png'
+    title: 'About Rachit Aggarwal | Background, Skills & Full-Stack Experience',
+    description: 'Career journey, work experiences, technical capability, education, and development approach of Rachit Aggarwal. 3+ years delivering 25+ client projects.',
+    keywords: ['About Rachit Aggarwal', 'Full-Stack Developer Bio', 'Web Developer Experience', 'Next.js Developer Skills', 'Fastify Node.js Architecture'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/about'
   },
   {
     pageKey: 'projects',
     pageName: 'Projects Portfolio',
     path: '/projects',
-    title: 'Projects Portfolio | Rachit Aggarwal — Selected Work',
-    description: 'Browse featured web applications, WordPress platforms, enterprise portals, and Fastify REST API backends engineered by Rachit Aggarwal.',
-    keywords: ['Web Projects', 'Next.js Portfolio', 'Full-Stack Applications', 'WordPress Development Case Studies'],
-    ogImage: '/final-logo.png'
+    title: 'Featured Projects & Case Studies | Rachit Aggarwal Portfolio',
+    description: 'Explore live web applications, enterprise portals, custom WordPress platforms, and high-throughput REST API microservices engineered by Rachit Aggarwal.',
+    keywords: ['Web Projects Portfolio', 'Next.js Case Studies', 'Full-Stack Web Apps', 'WordPress Development Showcase', 'Fastify REST API Examples'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/projects'
   },
   {
     pageKey: 'services',
     pageName: 'Services & Capabilities',
     path: '/services',
-    title: 'Services | Rachit Aggarwal — Web Development & Design Solutions',
-    description: 'Full-Stack Next.js development, Fastify API microservices, custom WordPress solutions, UI/UX design, SEO optimization and more by Rachit Aggarwal.',
-    keywords: ['Web Development Services', 'Hire Next.js Developer', 'Custom WordPress Development', 'API Development Delhi'],
-    ogImage: '/final-logo.png'
+    title: 'Web Development Services & Solutions | Rachit Aggarwal',
+    description: 'End-to-end web development services: Next.js 14 web applications, Fastify REST API backends, custom WordPress development, and performance optimization.',
+    keywords: ['Web Development Services', 'Hire Next.js Developer', 'Fastify API Development', 'Custom WordPress Developer', 'Freelance Web Developer India'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/services'
   },
   {
     pageKey: 'blogs',
     pageName: 'Tech Blog & Insights',
     path: '/blogs',
-    title: 'Tech Blog | Rachit Aggarwal — Thoughts & Tutorials',
-    description: 'In-depth articles on modern web development, Next.js 14, Fastify APIs, Node.js performance, MongoDB optimization, and SEO best practices.',
-    keywords: ['Web Development Blog', 'Next.js Tutorials', 'Node.js Performance', 'Technical SEO Guides'],
-    ogImage: '/final-logo.png'
+    title: 'Engineering Blog & Web Dev Tutorials | Rachit Aggarwal',
+    description: 'In-depth articles, tutorials, and architectural insights on modern web development, Next.js 14, Fastify APIs, Node.js performance, and SEO best practices.',
+    keywords: ['Web Development Blog', 'Next.js Tutorials', 'Node.js Performance', 'Fastify Guides', 'Technical SEO Delhi'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/blogs'
   },
   {
     pageKey: 'contact',
     pageName: 'Contact & Inquiries',
     path: '/contact',
-    title: 'Contact Rachit Aggarwal | Get In Touch & Hire',
-    description: 'Get in touch with Rachit Aggarwal for custom software development, freelance projects, technical consulting, or collaborations.',
-    keywords: ['Contact Rachit Aggarwal', 'Hire Web Developer', 'Freelance Inquiry Delhi', 'Project Consultation'],
-    ogImage: '/final-logo.png'
+    title: 'Contact Rachit Aggarwal | Hire a Senior Full-Stack Developer',
+    description: 'Get in touch with Rachit Aggarwal for custom software development, freelance projects, technical consulting, or collaborations. Available for hire.',
+    keywords: ['Contact Rachit Aggarwal', 'Hire Web Developer Delhi', 'Freelance Web Developer Inquiry', 'Project Consultation'],
+    ogImage: 'https://web-apex.com/wp-content/uploads/2026/08/final-logo.png',
+    canonicalUrl: 'https://rachitaggarwal.vercel.app/contact'
   }
 ];
 
@@ -190,7 +196,8 @@ export default function AdminSeoPage() {
       title: p.title || '',
       description: p.description || '',
       keywords: Array.isArray(p.keywords) ? p.keywords : (p.keywordsStr ? p.keywordsStr.split(',').map(s => s.trim()).filter(Boolean) : []),
-      ogImage: p.ogImage || seoConfig.ogImage || '/final-logo.png'
+      ogImage: p.ogImage || seoConfig.ogImage || '/final-logo.png',
+      canonicalUrl: p.canonicalUrl || `https://rachitaggarwal.vercel.app${p.path === '/' ? '' : p.path}`
     }));
 
     const payload = {
@@ -213,8 +220,26 @@ export default function AdminSeoPage() {
     try {
       const res = await api.updateSeo(payload);
       setSuccessMsg('SEO & Page-Wise Metadata successfully saved to MongoDB Atlas!');
-      if (res.data?.pages) {
-        setSeoConfig(prev => ({ ...prev, pages: res.data.pages }));
+      if (res.data) {
+        const d = res.data;
+        const mergedPages = (d.pages && d.pages.length > 0) ? d.pages : formattedPages;
+        setSeoConfig(prev => ({
+          ...prev,
+          siteName: d.siteName || prev.siteName,
+          defaultTitle: d.defaultTitle || prev.defaultTitle,
+          defaultDescription: d.defaultDescription || prev.defaultDescription,
+          keywordsStr: Array.isArray(d.keywords) ? d.keywords.join(', ') : (d.keywords || prev.keywordsStr),
+          author: d.author || prev.author,
+          ogImage: d.ogImage || prev.ogImage,
+          twitterHandle: d.twitterHandle || prev.twitterHandle,
+          linkedinUrl: d.linkedinUrl || prev.linkedinUrl,
+          githubUrl: d.githubUrl || prev.githubUrl,
+          contactEmail: d.contactEmail || prev.contactEmail,
+          contactPhone: d.contactPhone || prev.contactPhone,
+          location: d.location || prev.location,
+          customHeadScripts: d.customHeadScripts || prev.customHeadScripts,
+          pages: mergedPages
+        }));
       }
       setTimeout(() => setSuccessMsg(''), 4000);
     } catch (err) {
@@ -467,8 +492,8 @@ export default function AdminSeoPage() {
                   type="text"
                   value={activePageData.title || ''}
                   onChange={(e) => updatePageField(activePageData.pageKey, 'title', e.target.value)}
-                  placeholder="Primary search title..."
-                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-cyan-400 font-medium"
+                  placeholder={`Leave blank to inherit global: "${seoConfig.defaultTitle || ''}"`}
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-cyan-400 font-medium placeholder:text-slate-600"
                 />
               </div>
 
@@ -484,8 +509,8 @@ export default function AdminSeoPage() {
                   rows={3}
                   value={activePageData.description || ''}
                   onChange={(e) => updatePageField(activePageData.pageKey, 'description', e.target.value)}
-                  placeholder="Compelling description for Google search snippet..."
-                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-cyan-400 leading-relaxed"
+                  placeholder="Leave blank to inherit global meta description..."
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-cyan-400 leading-relaxed placeholder:text-slate-600"
                 />
               </div>
 
@@ -496,8 +521,8 @@ export default function AdminSeoPage() {
                   type="text"
                   value={activePageData.keywordsStr !== undefined ? activePageData.keywordsStr : (Array.isArray(activePageData.keywords) ? activePageData.keywords.join(', ') : '')}
                   onChange={(e) => updatePageField(activePageData.pageKey, 'keywordsStr', e.target.value)}
-                  placeholder="e.g. Next.js Developer, Portfolio, Projects"
-                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 font-mono focus:outline-none focus:border-cyan-400"
+                  placeholder={`Leave blank to inherit global keywords: "${seoConfig.keywordsStr || ''}"`}
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 font-mono focus:outline-none focus:border-cyan-400 placeholder:text-slate-600"
                 />
               </div>
 
@@ -508,9 +533,27 @@ export default function AdminSeoPage() {
                   type="text"
                   value={activePageData.ogImage || ''}
                   onChange={(e) => updatePageField(activePageData.pageKey, 'ogImage', e.target.value)}
-                  placeholder="/final-logo.png or https://images..."
-                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-purple-400"
+                  placeholder={`Leave blank to inherit global banner: ${seoConfig.ogImage || '/final-logo.png'}`}
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white focus:outline-none focus:border-purple-400 placeholder:text-slate-600"
                 />
+              </div>
+
+              {/* Canonical URL */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-slate-300 font-semibold">Canonical URL (Rel="canonical")</label>
+                  <span className="text-[10px] text-slate-500 font-mono">Google Indexing Target</span>
+                </div>
+                <input
+                  type="url"
+                  value={activePageData.canonicalUrl || ''}
+                  onChange={(e) => updatePageField(activePageData.pageKey, 'canonicalUrl', e.target.value)}
+                  placeholder={`Auto: https://rachitaggarwal.vercel.app${activePageData.path === '/' ? '' : activePageData.path}`}
+                  className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 font-mono focus:outline-none focus:border-cyan-400 placeholder:text-slate-600"
+                />
+                <p className="text-[10px] text-slate-500 mt-1">
+                  Tells Google and search engines the official primary URL of this page to prevent duplicate indexing.
+                </p>
               </div>
             </div>
 
@@ -529,14 +572,14 @@ export default function AdminSeoPage() {
                       R
                     </div>
                     <div className="text-[11px] text-slate-300 truncate">
-                      https://rachitaggarwal.dev{activePageData.path}
+                      https://rachitaggarwal.vercel.app{activePageData.path}
                     </div>
                   </div>
                   <h4 className="text-base text-[#8ab4f8] hover:underline font-normal cursor-pointer leading-snug break-words">
-                    {activePageData.title || seoConfig.defaultTitle || 'Page Title'}
+                    {activePageData.title?.trim() || seoConfig.defaultTitle || 'Page Title'}
                   </h4>
                   <p className="text-xs text-[#bdc1c6] leading-relaxed line-clamp-2 break-words">
-                    {activePageData.description || seoConfig.defaultDescription || 'Add a compelling meta description to see how it appears on Google searches.'}
+                    {activePageData.description?.trim() || seoConfig.defaultDescription || 'Add a compelling meta description to see how it appears on Google searches.'}
                   </p>
                 </div>
               </div>
@@ -550,9 +593,9 @@ export default function AdminSeoPage() {
 
                 <div className="rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                   <div className="h-32 bg-slate-900 relative flex items-center justify-center overflow-hidden">
-                    {activePageData.ogImage || seoConfig.ogImage ? (
+                    {activePageData.ogImage?.trim() || seoConfig.ogImage ? (
                       <img
-                        src={activePageData.ogImage || seoConfig.ogImage}
+                        src={activePageData.ogImage?.trim() || seoConfig.ogImage}
                         alt="Social preview"
                         className="w-full h-full object-cover"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -562,12 +605,12 @@ export default function AdminSeoPage() {
                     )}
                   </div>
                   <div className="p-3 space-y-1">
-                    <span className="text-[10px] text-purple-400 uppercase font-mono">rachitaggarwal.dev</span>
+                    <span className="text-[10px] text-purple-400 uppercase font-mono">rachitaggarwal.vercel.app</span>
                     <h5 className="text-xs font-bold text-white line-clamp-1">
-                      {activePageData.title || seoConfig.defaultTitle}
+                      {activePageData.title?.trim() || seoConfig.defaultTitle}
                     </h5>
                     <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
-                      {activePageData.description || seoConfig.defaultDescription}
+                      {activePageData.description?.trim() || seoConfig.defaultDescription}
                     </p>
                   </div>
                 </div>

@@ -13,12 +13,12 @@ export const metadata = {
   keywords: ['Rachit Aggarwal', 'Senior Web Developer', 'Full-Stack Developer', 'Next.js Developer', 'Fastify', 'Node.js', 'WordPress', 'Delhi Software Engineer'],
   authors: [{ name: 'Rachit Aggarwal' }],
   creator: 'Rachit Aggarwal',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_FRONTEND_URL || 'https://rachitaggarwal.vercel.app'),
   openGraph: {
     title: 'Rachit Aggarwal | Senior Web Developer',
     description: 'Senior Web Developer specializing in Next.js, Node.js, Fastify, MongoDB & WordPress.',
     type: 'website',
-    url: 'http://localhost:3000',
+    url: 'https://rachitaggarwal.vercel.app',
     siteName: 'Rachit Aggarwal Portfolio',
   },
   robots: { index: true, follow: true }

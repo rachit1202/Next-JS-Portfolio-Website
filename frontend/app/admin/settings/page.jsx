@@ -552,7 +552,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={config.websiteUrl || ''}
                       onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })}
-                      placeholder="https://rachitaggarwal.dev"
+                      placeholder="https://rachitaggarwal.vercel.app"
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-400"
                     />
                   </div>
@@ -562,7 +562,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={config.websiteLabel || ''}
                       onChange={(e) => setConfig({ ...config, websiteLabel: e.target.value })}
-                      placeholder="rachitaggarwal.dev"
+                      placeholder="rachitaggarwal.vercel.app"
                       className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-cyan-400"
                     />
                   </div>

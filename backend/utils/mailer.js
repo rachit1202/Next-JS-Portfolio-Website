@@ -146,7 +146,7 @@ async function sendLeadNotificationEmail(lead) {
               <td style="padding: 8px 0; color: #94a3b8; font-weight: 600;">Submitted From:</td>
               <td style="padding: 8px 0;">
                 <a href="${lead.pageUrl || '#'}" target="_blank" style="color: #a78bfa; text-decoration: none; font-size: 12px; word-break: break-all;">
-                  ${lead.pageUrl || 'https://rachitaggarwal.dev/contact'}
+                  ${lead.pageUrl || 'https://rachitaggarwal.vercel.app/contact'}
                 </a>
               </td>
             </tr>

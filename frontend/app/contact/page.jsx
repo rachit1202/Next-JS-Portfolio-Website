@@ -20,7 +20,7 @@ export default async function ContactPage() {
     { icon: <Mail className="w-4 h-4 text-purple-400" />, label: 'Email', value: config.email || 'rachitaggarwal1202@gmail.com', href: `mailto:${config.email || 'rachitaggarwal1202@gmail.com'}` },
     { icon: <Phone className="w-4 h-4 text-cyan-400" />, label: 'Phone', value: config.phone || '+91 9873088907', href: `tel:${config.phone || '+919873088907'}` },
     { icon: <MapPin className="w-4 h-4 text-indigo-400" />, label: 'Location', value: config.location || 'Rohini, New Delhi 110085, India', href: null },
-    { icon: <Globe className="w-4 h-4 text-emerald-400" />, label: 'Website', value: config.websiteLabel || config.websiteUrl || 'rachitaggarwal.dev', href: config.websiteUrl ? (config.websiteUrl.startsWith('http') ? config.websiteUrl : `https://${config.websiteUrl}`) : '#' },
+    { icon: <Globe className="w-4 h-4 text-emerald-400" />, label: 'Website', value: config.websiteLabel || config.websiteUrl || 'rachitaggarwal.vercel.app', href: config.websiteUrl ? (config.websiteUrl.startsWith('http') ? config.websiteUrl : `https://${config.websiteUrl}`) : 'https://rachitaggarwal.vercel.app' },
   ];
 
   const socialLinks = [

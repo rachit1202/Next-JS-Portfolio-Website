@@ -2,24 +2,22 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Clock, Calendar, Eye, Tag } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getItemMetadata } from '@/lib/seoHelper';
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const blogRes = await api.getBlogBySlug(slug).catch(() => null);
   const blog = blogRes?.data;
   if (!blog) return { title: 'Article Not Found | Rachit Aggarwal' };
-  return {
-    title: `${blog.metaTitle || blog.title} | Rachit Aggarwal`,
+
+  return getItemMetadata({
+    title: blog.metaTitle || blog.title,
     description: blog.metaDescription || blog.summary,
-    keywords: blog.keywords || blog.tags,
-    openGraph: {
-      title: blog.title,
-      description: blog.summary,
-      images: [blog.coverImage],
-      type: 'article',
-      publishedTime: blog.publishedAt,
-    }
-  };
+    coverImage: blog.coverImage,
+    path: `/blogs/${slug}`,
+    tags: [...(blog.keywords || []), ...(blog.tags || []), blog.category],
+    type: 'article'
+  });
 }
 
 export default async function BlogDetailPage({ params }) {

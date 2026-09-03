@@ -19,6 +19,7 @@ import {
   Send
 } from 'lucide-react';
 import { api } from '@/lib/api';
+import { getItemMetadata } from '@/lib/seoHelper';
 
 const CATEGORY_ICONS = {
   Development: <Code2 className="w-6 h-6 text-purple-400" />,
@@ -34,14 +35,14 @@ export async function generateMetadata({ params }) {
   const serviceRes = await api.getServiceBySlug(slug).catch(() => null);
   const service = serviceRes?.data;
   if (!service) return { title: 'Service Not Found | Rachit Aggarwal' };
-  return {
-    title: `${service.title} | Rachit Aggarwal — Senior Web Developer`,
-    description: service.shortDesc,
-    openGraph: {
-      title: `${service.title} — Professional Web Solutions`,
-      description: service.shortDesc,
-    }
-  };
+
+  return getItemMetadata({
+    title: service.title,
+    description: service.shortDesc || service.fullDesc,
+    path: `/services/${slug}`,
+    tags: [service.category, ...(service.techStack || []), 'Web Development Service', 'Freelance Developer'],
+    type: 'website'
+  });
 }
 
 export default async function ServiceDetailPage({ params }) {

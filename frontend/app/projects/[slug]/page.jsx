@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { ExternalLink, ArrowLeft, User, Code2, CheckCircle2, ArrowRight, ShieldCheck, Sparkles, Layers, Cpu } from 'lucide-react';
 import { GithubIcon } from '@/components/Icons';
 import { api } from '@/lib/api';
+import { getItemMetadata } from '@/lib/seoHelper';
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -13,15 +14,14 @@ export async function generateMetadata({ params }) {
     return { title: 'Project Not Found | Rachit Aggarwal' };
   }
 
-  return {
-    title: `${project.metaTitle || project.title} | Rachit Aggarwal Case Study`,
+  return getItemMetadata({
+    title: project.metaTitle || project.title,
     description: project.metaDescription || project.shortDescription,
-    openGraph: {
-      title: project.title,
-      description: project.shortDescription,
-      images: [project.coverImage],
-    }
-  };
+    coverImage: project.coverImage,
+    path: `/projects/${slug}`,
+    tags: [...(project.techStack || []), project.category, 'Web Project', 'Next.js', 'Fastify'],
+    type: 'website'
+  });
 }
 
 export default async function ProjectDetailPage({ params }) {

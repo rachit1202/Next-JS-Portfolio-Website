@@ -23,12 +23,12 @@ export default async function AboutPage() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
 
       {/* ===== HERO / ABOUT ME ===== */}
-      <section className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+      <section className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
         {/* Left: Content */}
         <div className="lg:col-span-3 space-y-8 animate-fade-in">
           <div>
             <p className="section-label mb-3">// ABOUT ME</p>
-            <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight">
+            <h1 className="text-4xl font-black text-white leading-tight">
               {config.aboutHeadline || 'Crafting the web with precision & passion.'}
             </h1>
           </div>
@@ -39,36 +39,11 @@ export default async function AboutPage() {
             ))}
           </div>
 
-          {/* Personal Info Grid */}
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { icon: <Mail className="w-4 h-4 text-purple-400" />, label: 'Email', value: config.email || 'rachitaggarwal1202@gmail.com', href: `mailto:${config.email || 'rachitaggarwal1202@gmail.com'}` },
-              { icon: <Phone className="w-4 h-4 text-cyan-400" />, label: 'Phone', value: config.phone || '+91 9873088907', href: `tel:${config.phone || '+919873088907'}` },
-              { icon: <MapPin className="w-4 h-4 text-indigo-400" />, label: 'Location', value: config.location || 'Rohini, New Delhi 110085', href: null },
-              { icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />, label: 'Availability', value: config.availabilityStatus || 'Open to Freelance / Full-time', href: null },
-            ].map(({ icon, label, value, href }) => (
-              <div
-                key={label}
-                className="flex items-start gap-3 p-3.5 rounded-2xl glass-card"
-              >
-                <div className="mt-0.5">{icon}</div>
-                <div>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5">{label}</p>
-                  {href ? (
-                    <a href={href} className="text-xs text-slate-200 hover:text-cyan-300 transition-colors break-all font-medium">{value}</a>
-                  ) : (
-                    <p className="text-xs text-slate-200 font-medium">{value}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* CTAs */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap items-center gap-4 pt-2">
             <Link
               href="/contact"
-              className="btn-primary flex items-center gap-2 text-sm"
+              className="btn-primary flex items-center gap-2 text-sm px-6 py-3"
             >
               Hire Me <ArrowRight className="w-4 h-4" />
             </Link>
@@ -77,7 +52,7 @@ export default async function AboutPage() {
                 href={config.cvUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="btn-ghost flex items-center gap-2 text-sm"
+                className="btn-ghost flex items-center gap-2 text-sm px-6 py-3"
               >
                 <Download className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
                 Download CV
@@ -125,6 +100,93 @@ export default async function AboutPage() {
                 Years of<br />Experience
               </span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== EXECUTIVE QUICK CONTACT & STATUS HUB (2x2 Mobile, 4-Col Desktop) ===== */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 animate-fade-in">
+        {/* Card 1: Email */}
+        <div className="group relative p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-[#07080f] border border-purple-500/20 hover:border-purple-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300 flex flex-col justify-between min-h-[135px] sm:min-h-[155px] overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 sm:w-24 h-20 sm:h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all pointer-events-none" />
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center bg-purple-500/15 border border-purple-500/30 text-purple-400 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/10 shrink-0">
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 font-bold whitespace-nowrap">
+              Direct Mail
+            </span>
+          </div>
+          <div className="space-y-0.5 sm:space-y-1">
+            <p className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider font-mono font-semibold">Email Address</p>
+            <a
+              href={`mailto:${config.email || 'rachitaggarwal1202@gmail.com'}`}
+              className="text-[11px] sm:text-[13px] font-bold text-white hover:text-purple-300 transition-colors break-all block leading-tight"
+              title={config.email || 'rachitaggarwal1202@gmail.com'}
+            >
+              {config.email || 'rachitaggarwal1202@gmail.com'}
+            </a>
+          </div>
+        </div>
+
+        {/* Card 2: Phone */}
+        <div className="group relative p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-[#07080f] border border-cyan-500/20 hover:border-cyan-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 flex flex-col justify-between min-h-[135px] sm:min-h-[155px] overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 sm:w-24 h-20 sm:h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all pointer-events-none" />
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/10 shrink-0">
+              <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-bold whitespace-nowrap">
+              WhatsApp
+            </span>
+          </div>
+          <div className="space-y-0.5 sm:space-y-1">
+            <p className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider font-mono font-semibold">Contact Phone</p>
+            <a
+              href={`tel:${config.phone || '+919873088907'}`}
+              className="text-[11px] sm:text-[13px] font-bold text-white hover:text-cyan-300 transition-colors block leading-tight whitespace-nowrap"
+            >
+              {config.phone || '+91 9873088907'}
+            </a>
+          </div>
+        </div>
+
+        {/* Card 3: Location */}
+        <div className="group relative p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-[#07080f] border border-indigo-500/20 hover:border-indigo-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300 flex flex-col justify-between min-h-[135px] sm:min-h-[155px] overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 sm:w-24 h-20 sm:h-24 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all pointer-events-none" />
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 group-hover:scale-110 transition-transform shadow-lg shadow-indigo-500/10 shrink-0">
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-bold whitespace-nowrap">
+              Delhi, India
+            </span>
+          </div>
+          <div className="space-y-0.5 sm:space-y-1">
+            <p className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider font-mono font-semibold">Location</p>
+            <p className="text-[11px] sm:text-[13px] font-bold text-white leading-tight">
+              {config.location || 'Rohini, New Delhi 110085, India'}
+            </p>
+          </div>
+        </div>
+
+        {/* Card 4: Availability */}
+        <div className="group relative p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-[#07080f] border border-emerald-500/20 hover:border-emerald-500/50 shadow-xl hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 flex flex-col justify-between min-h-[135px] sm:min-h-[155px] overflow-hidden">
+          <div className="absolute top-0 right-0 w-20 sm:w-24 h-20 sm:h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all pointer-events-none" />
+          <div className="flex items-center justify-between gap-2 mb-2 sm:mb-4">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 group-hover:scale-110 transition-transform shadow-lg shadow-emerald-500/10 shrink-0">
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-mono uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold whitespace-nowrap">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Active
+            </span>
+          </div>
+          <div className="space-y-0.5 sm:space-y-1">
+            <p className="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider font-mono font-semibold">Work Status</p>
+            <p className="text-[11px] sm:text-[13px] font-bold text-emerald-300 leading-tight">
+              {config.availabilityStatus || 'Available for freelance work'}
+            </p>
           </div>
         </div>
       </section>

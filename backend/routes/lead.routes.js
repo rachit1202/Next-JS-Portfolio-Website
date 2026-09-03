@@ -38,7 +38,7 @@ async function leadRoutes(fastify, options) {
                   request.raw?.socket?.remoteAddress || '';
     const ipAddress = (typeof rawIp === 'string' ? rawIp.split(',')[0].trim() : '').replace('::ffff:', '') || '127.0.0.1';
     const userAgent = request.headers['user-agent'] || '';
-    const finalPageUrl = pageUrl || request.headers['referer'] || 'https://rachitaggarwal.dev/contact';
+    const finalPageUrl = pageUrl || request.headers['referer'] || 'https://rachitaggarwal.vercel.app/contact';
     const finalSubject = subject || `${serviceNeeded || 'Project Inquiry'} - ${name}`;
 
     try {

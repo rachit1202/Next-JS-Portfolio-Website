@@ -166,8 +166,8 @@ export const defaultSiteConfig = {
   email: 'rachitaggarwal1202@gmail.com',
   phone: '+91 9873088907',
   whatsapp: '+91 9873088907',
-  websiteUrl: 'https://rachitaggarwal.dev',
-  websiteLabel: 'rachitaggarwal.dev',
+  websiteUrl: 'https://rachitaggarwal.vercel.app',
+  websiteLabel: 'rachitaggarwal.vercel.app',
   githubUsername: '@rachit1202',
   linkedinUsername: 'in/rachit-aggarwal-b9492b248',
   leadNotificationEmails: 'aggarwalrachit1202@gmail.com',
@@ -830,7 +830,7 @@ export async function generateMetadata({ params }) {
     title: \`\${blog.title} | Rachit Aggarwal\`,
     description: blog.summary,
     alternates: {
-      canonical: \`https://rachitaggarwal.dev/blogs/\${blog.slug}\`,
+      canonical: \`https://rachitaggarwal.vercel.app/blogs/\${blog.slug}\`,
     },
     openGraph: {
       title: blog.title,

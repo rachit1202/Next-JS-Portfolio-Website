@@ -8,7 +8,8 @@ const pageSeoSchema = new mongoose.Schema(
     title: { type: String, default: '' },
     description: { type: String, default: '' },
     keywords: [{ type: String }],
-    ogImage: { type: String, default: '' }
+    ogImage: { type: String, default: '' },
+    canonicalUrl: { type: String, default: '' }
   },
   { _id: false }
 );
